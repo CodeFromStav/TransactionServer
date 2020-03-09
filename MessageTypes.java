@@ -1,0 +1,6 @@
+
+// MessageTypes interface
+interface MessageTypes
+{
+
+}
