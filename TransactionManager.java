@@ -14,7 +14,7 @@ public class TransactionManager
     }
 
     // Run function for creating worker threads
-    public void run()
+    public void runTransaction()
     {
         TransactionManagerWorker worker = new TransactionManagerWorker();
         worker.start();
