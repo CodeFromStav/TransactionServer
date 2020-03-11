@@ -11,7 +11,8 @@ public class TCLient
   public read(){
 
   }
-  public write(){
+  public write()
+  {
     
   }
 }
