@@ -16,7 +16,37 @@ an arbitrarily chosen dollar amount is withdrawn
 from an arbitrarily chosen account and deposited
 onto another, arbitrarily chosen account.
 
---always stay strictly at the low level of elementary 
-read/write operations, instead of  implementing higher 
+--always stay strictly at the low level of elementary
+read/write operations, instead of  implementing higher
 level constructs like withdrawal and deposit.
 */
+
+public class Account {
+
+
+  int balance;
+  int accountNum;
+
+  public Account( int initBalance, int accountInitBalance )
+  {
+    this.balance = initBalance;
+    this.accountNum = accountInitBalance;
+  }
+
+  private int getAccountBalance() {
+    return this.balance;
+  }
+
+  private int getAccountNum() {
+    return this.accountNum;
+  }
+
+  public void setBalance( int newBalance ) {
+    this.balance = newBalance;
+  }
+
+  public void setAccountNum( int newAccountNum )
+  {
+    this.accountNum = newAccountNum;
+  }
+}
