@@ -13,6 +13,14 @@ The number of accounts is configurable.
   can handle any activities in any order whatsoever, 
   without any limitation or underlying assumption.
 
+  // Create AccountManager object
+    AccountManager accountManager = new AccountManager();
+
+  // Create LockManager object
+    LockManager lockManager = new LockManager();
+
+  // Create TransactionManager object
+    TransactionManager transactionManager = new TransactionManager();
 
 
 //Server loop always running in this class
