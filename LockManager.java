@@ -33,5 +33,3 @@ public synchronized void unLock( TransID trans)
 */
 
 //Transaction itself should have a list of its own locks above!!!
-}
-*/
