@@ -12,17 +12,12 @@
 //   can handle any activities in any order whatsoever, 
 //   without any limitation or underlying assumption.
 
-<<<<<<< Updated upstream
 -On the other hand, your transactional system,
  including the server proxy object on the client
   side, is absolutely unaware of the assumption of
   such a predefined sequence of activities, i.e. it
   can handle any activities in any order whatsoever,
   without any limitation or underlying assumption.
-=======
-// Create AccountManager object
-AccountManager accountManager = new AccountManager();
->>>>>>> Stashed changes
 
 // Create LockManager object
 LockManager lockManager = new LockManager();
@@ -51,7 +46,6 @@ while(true)
   }
 
 }
-<<<<<<< Updated upstream
 */
 
 import java.net.*;
@@ -154,5 +148,3 @@ public class TransactionServer {
         }
     }
 }
-=======
->>>>>>> Stashed changes
