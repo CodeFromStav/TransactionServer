@@ -7,7 +7,7 @@ public class Lock
 {    
     // Variable initialization
     private Object objects;
-    private Vector<E> holders;
+    private Vector <E> holders;
     private LockType lockType;
 
     // Function for acquiring a lock
