@@ -44,9 +44,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-/**
- * EchoServer
- */
+// server loop that we implemented in other projects
 public class TransactionServer {
     public static void main(String[] args) throws IOException
 	  {
