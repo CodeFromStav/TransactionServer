@@ -12,12 +12,8 @@
 //   can handle any activities in any order whatsoever, 
 //   without any limitation or underlying assumption.
 
--On the other hand, your transactional system,
- including the server proxy object on the client
-  side, is absolutely unaware of the assumption of
-  such a predefined sequence of activities, i.e. it
-  can handle any activities in any order whatsoever,
-  without any limitation or underlying assumption.
+// Create AccountManager object
+AccountManager accountManager = new AccountManager();
 
 // Create LockManager object
 LockManager lockManager = new LockManager();

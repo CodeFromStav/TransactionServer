@@ -9,35 +9,38 @@ write()
 -Takes read and write, tries to set locks. If no lock, within read and write you will be "blocked"
 */
 
-// Constructor
-public AccountManager()
+public class AccountManager
 {
+    // Constructor
+    public AccountManager()
+    {
 
-}
+    }
 
-// Read operation
-public int read( /* accountnumber, transaction, */)
-{
+    // Read operation
+    public int read( /* accountnumber, transaction, */)
+    {  
 
-}
+    }
 
-// Write operation
-public int write( int accountnumber, Transaction transaction, float balance)
-{
-    //get account
-    //lock 
-    //set balance
-    //return balance
-}
+    // Write operation
+    public int write( int accountnumber, Transaction transaction, float balance)
+    {
+        //get account
+        //lock 
+        //set balance
+        //return balance
+    }
 
 
 
-public void getAccount()
-{
+    public void getAccount()
+    {
 
-}
+    }
 
-public void giveAccountNumber()
-{
+    public void giveAccountNumber()
+    {
 
+    }
 }
