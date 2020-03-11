@@ -21,7 +21,8 @@ read/write operations, instead of  implementing higher
 level constructs like withdrawal and deposit.
 */
 
-public class Account {
+public class Account
+{
 
 
   int balance;
@@ -33,15 +34,18 @@ public class Account {
     this.accountNum = accountInitBalance;
   }
 
-  private int getAccountBalance() {
+  private int getAccountBalance()
+  {
     return this.balance;
   }
 
-  private int getAccountNum() {
+  private int getAccountNum()
+  {
     return this.accountNum;
   }
 
-  public void setBalance( int newBalance ) {
+  public void setBalance( int newBalance )
+  {
     this.balance = newBalance;
   }
 
