@@ -24,7 +24,7 @@ public class AccountManager
     }
 
     // Write operation
-    public int write( int accountnumber, Transaction transaction, float balance)
+    public int write( int accountnumber, Transaction transaction, float balance, MessageTypes messageCode)
     {
         //get account
         //lock 
