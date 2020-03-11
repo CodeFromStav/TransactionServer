@@ -31,8 +31,7 @@ public class AccountManager
         //set balance
         //return balance
     }
-
-
+        
 
     public void getAccount()
     {
