@@ -7,6 +7,12 @@ public class LockManager{
 
 private Hashtable theLocks;
 
+// LockManager constructor
+public LockManager()
+{
+
+}
+
 public void setLock( Object object, TransID trans, LockType lockType)
 {
     Lock foundLock;
