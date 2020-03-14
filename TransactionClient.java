@@ -1,6 +1,6 @@
 
 // Transaction Client class
-public class TCLient extends Thread
+public class TransactionClient extends Thread
 {
   public void run()
   {

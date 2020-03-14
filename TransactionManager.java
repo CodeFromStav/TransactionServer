@@ -1,4 +1,6 @@
- /*
+import java.util.ArrayList;
+
+/*
 TransactionManager.java
 -has transaction manager workers
 -open up one connection per transaction, stays open until a close transaction is received.
@@ -22,10 +24,14 @@ public class TransactionManager
     return this.transactions;
   }
 
-
+  public void runTransaction( /* incoming socket as parameter */)
+  {
+    // accept incoming connections
+    // call run() to start up worker threads
+  }
 
   // Run function for creating worker threads
-  public void runTransaction()
+  public void run()
   {
       TransactionManagerWorker worker = new TransactionManagerWorker();
       Thread transactionWorker = new Thread(worker);
