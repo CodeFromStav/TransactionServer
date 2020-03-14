@@ -16,13 +16,13 @@ public class AccountManager implements MessageTypes
 
     }
 
-    // Read operation
+    // Read operation for accounts
     public int read( int accountnumber, Transaction transaction)
     {
 
     }
 
-    // Write operation
+    // Write operation for accounts
     public int write( int accountnumber, Transaction transaction, float balance)
     {
         // int withdraw;
