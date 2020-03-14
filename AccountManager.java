@@ -9,7 +9,7 @@ write()
 -Takes read and write, tries to set locks. If no lock, within read and write you will be "blocked"
 ACCOUNTS ONLY HOLD WHOLE NUMBER AMOUNTS 
 */
-public class AccountManager implements MessageTypes
+public class AccountManager implements TransactionTypes
 {
     int accountNum;
     int accountBal;
@@ -46,7 +46,7 @@ public class AccountManager implements MessageTypes
 
             case deposit:
                 balance += deposit; //sets new balance after deposit
-                
+
                 break;
         }
 
