@@ -13,8 +13,10 @@ public class AccountManager implements TransactionTypes
 {
     int accountNum;
     int accountBal;
+    private int transactionCode; //may not be necessary
 
-    // Constructor (creates accounts)
+
+    // Constructor (creates account blueprint)
     public AccountManager( int accountNumber, int balance)
     {
         this.accountNum = accountNumber;
@@ -37,7 +39,7 @@ public class AccountManager implements TransactionTypes
         // int withdraw;
         // int deposit;
         //Use Transaction Types
-        switch( transaction )
+        switch( transaction ) //plug in transactionCode
         {
             case withdraw:
                 balance -= withdraw; //sets new balance after withdrawal
@@ -48,11 +50,7 @@ public class AccountManager implements TransactionTypes
                 balance += deposit; //sets new balance after deposit
 
                 break;
-        }
-
-        
-
-        
+        }    
         
         // if ()
         // withdraw += balance;
@@ -63,6 +61,10 @@ public class AccountManager implements TransactionTypes
     }
 
 
+    public int getCode() //may not be necessary
+    {
+        return transactionCode;
+    }
 
     public void getAccount( int accountnumber)
     {
