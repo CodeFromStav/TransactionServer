@@ -10,18 +10,31 @@ public class Lock implements LockTypes
     private Vector <E> holders; //the TID's of current holders
     private LockType lockType; //the currenty type
 
+    public Lock(Account account)
+    {
+        this.lockHolders = new ArrayList();
+        this.lockReq = new HashMap();
+        this.account = account;
+        this.currentLockType = EMPTY_LOCK;
+    }
+
     // Function for acquiring a lock
     public synchronized void acquire( TransID trans, LockType aLockType )
     {
-        while( /* another transaction holds the lock in conflicting mode */ )
+        while( isConflict(transaction, newLockType ) )/* another transaction holds the lock in conflicting mode */ 
         {
             try 
             {
-               wait(); 
+                // transaction.log("[Lock.acquire])
+                addLockRequest(transaction, newLockType);
+                wait(); 
+                removeLockRequest(transaction);
+                //transaction.log("[Lock.acquire])
             } 
             catch (InterruptedException e) {
                 //TODO: handle exception
                 //Print stacktrace
+            
             }
         }
         // if no transactions hold locks

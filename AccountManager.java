@@ -27,6 +27,15 @@ public class AccountManager implements TransactionTypes
     // Read operation for accounts
     public int read( int accountNumber, Transaction transaction)
     {
+        //get the acount
+        Account account = getAccount(accountNumber);
+
+        //set the read lock
+        (TransactionServer.lockManager).lock(account, transaction, READ_LOCK);
+
+        //the above call will wait (if not deadlock). Then continue.
+       TODO://return (getAccount(accountNumber)).getBalance();
+
         system.out.println( "Account Number: " + accountNumber + "\n" );
         system.out.println( "Transaction: " + transaction );
         //return these values
@@ -38,6 +47,8 @@ public class AccountManager implements TransactionTypes
     {
         // int withdraw;
         // int deposit;
+
+        Account account = getAccount(accountNumber);
         //Use Transaction Types
         switch( transaction ) //plug in transactionCode
         {
@@ -66,13 +77,18 @@ public class AccountManager implements TransactionTypes
         return transactionCode;
     }
 
-    public void getAccount( int accountnumber)
+    public void getBalance()
     {
 
     }
 
-    public void giveAccountNumber()
+    public int getAccount(int accountnumber)
     {
 
     }
+
+    // public void giveAccount(int accountNumber)
+    // {
+
+    // }
 }
