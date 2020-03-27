@@ -1,3 +1,4 @@
+import java.net.Socket;
 import java.util.ArrayList;
 
 /*
@@ -7,10 +8,14 @@ TransactionManager.java
 -Read/Write requests handled by TransactionWorker
 */
 
-public class TransactionManager
+public class TransactionManager implements MessageTypes
 {
+
+  private static int transactionCounter = 0;
+  private static final ArrayList<Transaction> transactions = new ArrayList<>();
+
   // I dont know what this is supposed to be a list of
-  ArrayList<Transaction> transactions = new ArrayList<Transaction>;
+  // ArrayList<Transaction> transactions = new ArrayList<Transaction>;
 
   // Constructor
   public TransactionManager()
@@ -21,11 +26,13 @@ public class TransactionManager
   // getter of the list of transactions
   public ArrayList<Transaction> getTransactions()
   {
-    return this.transactions;
+    return transactions;
   }
 
-  public void runTransaction( /* incoming socket as parameter */)
+
+  public void runTransaction( Socket client )
   {
+    (new TransactionManagerWorker(client)).start(); 
     // accept incoming connections
     // call run() to start up worker threads
   }
