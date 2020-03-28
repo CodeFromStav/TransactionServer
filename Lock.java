@@ -1,14 +1,19 @@
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Vector;
 
 // Lock class containing basic lock functionality
 public class Lock implements LockTypes
 {    
     // Variable initialization
-    private Object objects; //object being protected by the lock
-    private Vector <E> holders; //the TID's of current holders
-    private LockType lockType; //the currenty type
+    private Object objects; //object being protected by the lock -- might not need this anymore--
+    private Vector <E> holders; //the TID's of current holders --might not need this anymore--
+    private LockType lockType; //the currenty type --might not need this anymore--
+    private final Account account;
+    private int currentLockType;
+    private final ArrayList<Transaction> lockHolders;
+    private final HashMap<Transaction, Object[]> lockRequestors;
 
     public Lock(Account account)
     {
@@ -61,10 +66,63 @@ public class Lock implements LockTypes
     }
 
     // Function for releasing a lock
-    public synchronized void release( TransID trans )
+    public synchronized void release( Transaction transaction )
     {
-        holders.removeElement( trans ); //remove this holder
-        // set lockType to none
+        lockHolders.remove( transaction );
+        if( lockHolders.isEmpty() )
+        {
+            currentLockType = EMPTY_LOCK;
+            if( lockRequestors.isEmpty() )
+            {
+                // lock is not being used so delete it
+            }
+        }
         notifyAll();
+    }
+
+    // Used to check is there are conflicting locks being set
+    private boolean isConflict( Transaction transaction, int newLockType )
+    {
+        if( lockHolders.isEmpty() )
+        {
+            // no lock holders so no conflict
+            transaction.log( /* stuff goes here */ );
+            return false;
+        }
+        else if( lockHolders.size() == 1 && lockHolders.contains( transaction ) )
+        {
+            // not sure if below code is correct, just guessing based on screenshots
+            lockHolders.add( transaction );
+            currentLockType = newLockType;
+            transaction.addLock( this );
+            // log it
+        }
+        else if( !lockHolders.contains( transaction ) )
+        {
+            // another transaction holds the lock (this is a read lock), so just share it
+            Iterator <Transaction> lockIterator = lockHolders.iterator();
+            Transaction otherTransaction;
+            StringBuilder logString = new StringBuilder( "Created lock " + getLockTypeString( currentLockType ) + " on account #" + account.getAccountNum() );
+            while( lockIterator.hasNext() )
+            {
+                otherTransaction = lockIterator.next();
+                logString.append( " " ).append( otherTransaction.getID() );
+            }
+            transaction.log( logString.toString() );
+            // add the transaction
+            lockHolders.add( transaction );
+            transaction.addLock( this );
+        }
+        else if( lockHolders.size() == 1 && currentLockType == READ_LOCK && newLockType == WRITE_LOCK )
+        {
+            // check if the lock needs to be promoted
+            transaction.log( "Promoting " + getLockTypeString( currentLockType ) + " to " + getLockTypeString( newLockType ) + " on account #" + account.getAccountNum() )
+            currentLockType = newLockType;
+        }
+        else
+        {
+            // no need to do anything else
+            transaction.log( "Ignore setting " + getLockTypeString( currentLockType ) + " to " getLockTypeString( newLockType ) + " on account #" + account.getAccountNum() );
+        }
     }
 }
