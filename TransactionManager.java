@@ -42,13 +42,4 @@ public class TransactionManager implements MessageTypes
     // accept incoming connections
     // call run() to start up worker threads
   }
-
-
-  // Run function for creating worker threads
-  public void run()
-  {
-      TransactionManagerWorker worker = new TransactionManagerWorker();
-      Thread transactionWorker = new Thread(worker);
-      transactionWorker.start();
-  }
 }
