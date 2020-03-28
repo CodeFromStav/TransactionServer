@@ -82,8 +82,61 @@ public class TransactionManagerWorker extends Thread implements MessageTypes
                     }
                     catch (IOException e)
                     {
-                      
+                      Sytem.out.println("[TransactionManagerWorker.run] CLOSE_TRANSACTION - error when closing connection to client");
                     }
+
+                    transaction.log("[TransactionManagerWorker.run] CLOSE_TRANSACTION #" + transaction.getID());
+
+                    // final printout of all the transaction's logs
+                    if (TransactionServer.transactionView)
+                    {
+                      System.out.println(transaction.getlog());
+                    }
+
+                    break;
+
+                    // Read a transaction
+                case READ_REQUEST:
+                    accountNumber = (Integer)message.getContent();
+                    transaction.log("[TransactionManagerWorker.run] READ_REQUEST >>>>>>>>>> account #" + accountNumber);
+                    balance = TransactionServer.accountManager.read(accountNumber, transaction);
+
+                    try
+                    {
+                      writeToNet.writeObject((Integer) balance);
+                    }
+                    catch (IOException e)
+                    {
+                      System.out.println("[TransactionManagerWorker.run] READ_REQUEST - Error when writing to object stream");
+                    }
+
+                    transaction.log("[TransactionManagerWorker.run] READ_REQUEST <<<<<<<<<<< account #" + accountNumber + ", new balance $" + balance);
+
+                    break;
+
+                case WRITE_REQUEST:
+
+                    Object[] content = (Object[]) message.getContent();
+                    accountNumber = ((Integer) content[0]);
+                    balance = ((Integer) content[1]);
+                    transaction.log("[TransactionManagerWorker.run] WRITE_REQUEST >>>>>>>>>> account #" + accountNumber + ", new balance $" + balance);
+                    balance = TransactionServer.accountManager.write(accountNumber, transaction, balance);
+
+                    try
+                    {
+                        writeToNet.writeObject((Integer) balance);
+                    }
+                    catch (IOException e)
+                    {
+                      System.out.println("[TransactionManagerWorker.run] WRITE_REQUEST - Error when writing to object stream");
+                    }
+
+                    transaction.log("[TransactionManagerWorker.run] WRITE_REQUEST <<<<<<<<<<< account #" + accountNumber + ", new balance $" + balance);
+
+                    break;
+
+                default:
+                    System.out.println("[TransactionManagerWorker.run] Warning: Message type not implemented");
 
             }
         }
