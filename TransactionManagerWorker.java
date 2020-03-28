@@ -1,28 +1,75 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 // TransactionManagerWorker handles openTransaction requests, write requests, read requests, and closeTransaction requests
-public class TransactionManagerWorker extends Thread
+public class TransactionManagerWorker extends Thread implements MessageTypes
 {
-    // Run function for worker threads
+    // Variable initialization
+    Socket client = null;
+    ObjectInputStream readFromNet = null;
+    ObjectOutputStream readToNet = null;
+    Message message = null;
+    Transaction transaction = null;
+    int accountNumber = 0;
+    int balance = 0;
+    boolean keepgoing = true;
+
+    // Constructor
+    public TransactionManagerWorker( Socket client )
+    {
+        this.client = client;
+        try 
+        {
+            readFromNet = new ObjectInputStream( client.getInputStream() );
+            readToNet = new ObjectOutputStream( client.getOutputStream() );
+        } 
+        catch ( IOException e ) 
+        {
+            System.out.println( "Failed to open object streams." );
+            e.printStackTrace();
+            System.exit( 1 );
+        }
+    }
+
+    @Override
     public void run()
     {
-        // switch( /* switch on type of incoming request*/ )
-        // {
-        //     case OPEN_TRANSACTION:
-        //         // take incoming port of transaction
-        //         // open connection
-        //         break;
-        //
-        //     case READ:
-        //         // send back information to client without writing anything new
-        //         break;
-        //
-        //     case WRITE:
-        //         // write new information as requested in transaction
-        //         break;
-        //
-        //     case CLOSE_TRANSACTION:
-        //         // close connection
-        //         break;
-        // }
+        while( keepgoing )
+        {
+            try 
+            {
+                message = (Message) readFromNet.readObject();
+            } 
+            catch ( IOException | ClassNotFoundException e ) 
+            {
+                System.out.println( "Failed to read message from object stream." );
+                System.exit( 1 );
+            }
+            // Switch statement to check and process type of message
+            switch( message.getType() )
+            {
+                // Openning a transaction
+                case OPEN_TRANSACTION:
+                    synchronized( transaction )
+                    {
+                        transaction = new Transaction( transactionCounter++ );
+
+                    }
+                    try 
+                    {
+                        writeToNet.writeObject( transaction.getID() );
+                    } 
+                    catch ( IOException e ) 
+                    {
+                        System.out.println( "Error opening transaction" );
+                    }
+                    transaction.log( "OPEN_TRANSACTION #" + transaction.getID() );
+                    break;
+                // Closing a transaction
+                case CLOSE_TRANSACTION:
+            }
+        }
     }
 }
