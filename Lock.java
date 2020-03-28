@@ -24,8 +24,9 @@ public class Lock implements LockTypes
     }
 
     // Function for acquiring a lock
-    public synchronized void acquire( TransID trans, LockType aLockType )
+    public synchronized void acquire( TransID trans, LockType newLockType )
     {
+        //transaction.log("[Lock.acquire]   | try + ")
         while( isConflict(transaction, newLockType ) )/* another transaction holds the lock in conflicting mode */ 
         {
             try 
@@ -45,8 +46,9 @@ public class Lock implements LockTypes
         // if no transactions hold locks
         if( holders.isEmpty() ) //no TID's hold lock
         {
-            holders.addElement( trans );
-            lockType = aLockType;
+            holders.addElement( transaction );
+            currentlockType = newLockType;
+            transaction.addLock(this);
         }
 
         else if( /* another transaction holds the lock, share it */ )
@@ -72,6 +74,7 @@ public class Lock implements LockTypes
         if( lockHolders.isEmpty() )
         {
             currentLockType = EMPTY_LOCK;
+            
             if( lockRequestors.isEmpty() )
             {
                 // lock is not being used so delete it
