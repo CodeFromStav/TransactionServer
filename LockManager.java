@@ -1,54 +1,86 @@
 
-LockManager (pseudocode is in the book lock.java, lockManager.java)
+// LockManager (pseudocode is in the book lock.java, lockManager.java)
+import java.util.HashMap;
+import transaction.server.account.Account;
+import java.util.Iterator;
+import transaction.server.transaction.Transaction;
 
-public class LockManager{
 
-
-private Hashtable theLocks;
-
-// LockManager constructor
-public LockManager()
+public class LockManager implements LockTypes
 {
 
-}
 
-public void setLock( Object object, TransID trans, LockType lockType)
-{
-    Lock foundLock;
-    synchronized (this)
+  private static HashMap<Account, Lock> theLocks;
+  private static boolean applyLocking;
+
+  // LockManager constructor
+  public LockManager(boolean applyLocking)
+  {
+    theLocks = new HashMap<>();
+    this.applyLocking = applyLocking;
+  }
+
+  public void lock(Account account, Transaction transaction, int lockType)
+  {
+    if(!applyLocking)
     {
-        //find the lock associated with object
-        //if there isnt one, create it and add to hashtable
+      return;
     }
-}
-// (this is all terribly inefficient)
 
-public synchronized void unLock( TransID trans)
-{
-    //return if no locking
-    if(!applyLocking) return;
-
-    Iterator<Lock> lockIterator = transaction.getLocks().listIterator();
-    Lock currentLock;
-    while(lockIterator.hasNext())
+    Lock lock;
+    synchronized(this)
     {
-        currentLock = lockIterator.next();
-        //transaction.log("[LockManager.unLock]      | release " + Lock.getLockTypeString(currentLock.getLockType()) + ", account)
-        currentLock.release(transaction);
-        //-------------------------------
+      lock = locks.get(account);
 
-            //if( lock is empty and lock request is empty */)
-            //remove the lock, not needed anymore.
+      if(lock == null)
+      {
+        lock = new Lock(account);
+        theLocks.put(account, lock);
+
+        transaction.log("[LockManager.setLock]       | lock created, account #" + account.getNumber());
+      }
     }
-    // Enumeration e = theLocks.element();
-    // while(e.hasMoreElements())
-    // {
-    //     Lock aLock = (Lock) (e.nextElement());
-    //     if( *trans is a holder of this lock ) //check if lock is being held by this transaction 
-    //     {
-    //         aLock.release(trans) 
-    //     }
-    // }
+    lock.acquire(transaction, locktype);
+  }
+
+  // public void setLock( Object object, TransID trans, LockType lockType)
+  // {
+  //     Lock foundLock;
+  //     synchronized (this)
+  //     {
+  //         //find the lock associated with object
+  //         //if there isnt one, create it and add to hashtable
+  //     }
+  // }
+  // (this is all terribly inefficient)
+
+  public synchronized void unLock( TransID trans)
+  {
+      //return if no locking
+      if(!applyLocking) return;
+
+      Iterator<Lock> lockIterator = transaction.getLocks().listIterator();
+      Lock currentLock;
+      while(lockIterator.hasNext())
+      {
+          currentLock = lockIterator.next();
+          //transaction.log("[LockManager.unLock]      | release " + Lock.getLockTypeString(currentLock.getLockType()) + ", account)
+          currentLock.release(transaction);
+          //-------------------------------
+
+              //if( lock is empty and lock request is empty */)
+              //remove the lock, not needed anymore.
+      }
+      // Enumeration e = theLocks.element();
+      // while(e.hasMoreElements())
+      // {
+      //     Lock aLock = (Lock) (e.nextElement());
+      //     if( *trans is a holder of this lock ) //check if lock is being held by this transaction
+      //     {
+      //         aLock.release(trans)
+      //     }
+      // }
+  }
 }
 
 
