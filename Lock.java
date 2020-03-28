@@ -5,11 +5,8 @@ import java.util.Vector;
 
 // Lock class containing basic lock functionality
 public class Lock implements LockTypes
-{    
+{
     // Variable initialization
-    private Object objects; //object being protected by the lock -- might not need this anymore--
-    private Vector <E> holders; //the TID's of current holders --might not need this anymore--
-    private LockType lockType; //the currenty type --might not need this anymore--
     private final Account account;
     private int currentLockType;
     private final ArrayList<Transaction> lockHolders;
@@ -27,43 +24,67 @@ public class Lock implements LockTypes
     public synchronized void acquire( TransID trans, LockType newLockType )
     {
         //transaction.log("[Lock.acquire]   | try + ")
-        while( isConflict(transaction, newLockType ) )/* another transaction holds the lock in conflicting mode */ 
+        while( isConflict(transaction, newLockType ) )/* another transaction holds the lock in conflicting mode */
         {
-            try 
+            try
             {
                 // transaction.log("[Lock.acquire])
-                addLockRequest(transaction, newLockType);
-                wait(); 
-                removeLockRequest(transaction);
+                addLockRequestor(transaction, newLockType);
+                wait();
+                removeLockRequestor(transaction);
                 //transaction.log("[Lock.acquire])
-            } 
+            }
             catch (InterruptedException e) {
-                //TODO: handle exception
-                //Print stacktrace
-            
+                // we need to interrupt the current thread
+                Thread.currentThread().interrupt();
+                transaction.log("[Lock.acquire] was interrupted");
+
             }
         }
         // if no transactions hold locks
-        if( holders.isEmpty() ) //no TID's hold lock
+        if( lockholders.isEmpty() ) //no TID's hold lock
         {
             holders.addElement( transaction );
             currentlockType = newLockType;
             transaction.addLock(this);
+
+            transaction.log("[Lock.acquire]        |<----woke up, setting" + getLockTypeString(newLockType) + " on account #" + account.getNumber());
         }
 
-        else if( /* another transaction holds the lock, share it */ )
+        else if(!lockHolders.contains(transaction))
         {
 
-            if( /* this transaction is not a holder */ )
+            Iterator <Transaction> lockIterator = lockHolders.iterator();
+            Transaction otherTransaction;
+
+            // might need to fix this logString part to better show what we are accomplishing with this function
+            StringBuilder logString = new StringBuilder("[Lock.acquire]        |share" + getLockTypeString(currentLockType));
+
+            while(lockIterator.hasNext())
             {
-                holders.addElement( trans );
+              otherTransaction = lockIterator.next();
+              logString.append(" ").append(otherTransaction.getID());
             }
+            transaction.log(logString.toString());
 
+            // just add this transaction
+            lockHolders.add(transaction);
+            transaction.addLock(this);
+        }
+        else if(!lockHolders.size() == 1 && currentLockType == READ_LOCK && newLockType == WRITE_LOCK)
+        {
+          // when the two above checks fail, this transaction is a lock holders
+          // here we check if the lock needs to be promoted, which is onlu possible if this transaction is the only holder
+          transaction.log("[Lock.acquire]           | promote" + getLockTypeString(currentLockType) + " to " + getLockTypeString(newLockType) + " on acount" + account.getNumber());
+          currentLockType = newLocktype;
         }
 
-        else if( /* this transaction is a holder but needs a more exlusive look */)
+
+        }
+        else
         {
-            lockType.promote();
+          // do not do anything
+          // transaction.log....
         }
     }
 
@@ -74,7 +95,7 @@ public class Lock implements LockTypes
         if( lockHolders.isEmpty() )
         {
             currentLockType = EMPTY_LOCK;
-            
+
             if( lockRequestors.isEmpty() )
             {
                 // lock is not being used so delete it
