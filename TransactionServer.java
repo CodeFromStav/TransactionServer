@@ -1,5 +1,8 @@
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
+import java.util.*;
 
 // abstract
 // Your transaction server will manage X number
@@ -26,18 +29,37 @@ public class TransactionServer extends Thread
 
   public TransactionServer(String serverPropertiesFile)
   {
-    Properties serverProperties = null;
+    // Properties stuff
+    Properties serverProperties = new Properties();
+    InputStream input = null;
 
     // get Properties
     try
     {
-      serverProperties = new PropertyHandler(serverPropertiesFile);
+      //serverProperties = new PropertyHandler(serverPropertiesFile);
+      input = new FileInputStream( "ServerProperties.properties" );
+      // load the properties file
+      serverProperties.load( input );
     }
     catch (Exception e)
     {
       System.out.println("[TransactionServer.TransactionServer] Didn't find properties file \"" + serverPropertiesFile + "\"");
       e.printStackTrace();
       System.exit(1);
+    }
+    finally
+    {
+      if( input != null )
+      {
+        try 
+        {
+          input.close();
+        } 
+        catch ( IOException e ) 
+        {
+          e.printStackTrace();
+        }
+      }
     }
 
     // create transaction LockManager
@@ -82,7 +104,7 @@ public void run()
     {
       transactionManager.runTransaction(serverSocket.accept());
     }
-    catch (EOException e)
+    catch (IOException e)
     {
       System.out.println("[TransactionServer.run] Warning: Error accepting client");
       e.printStackTrace();
