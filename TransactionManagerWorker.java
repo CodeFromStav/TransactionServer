@@ -3,6 +3,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+
 // TransactionManagerWorker handles openTransaction requests, write requests, read requests, and closeTransaction requests
 public class TransactionManagerWorker extends Thread implements MessageTypes
 {
@@ -20,12 +21,12 @@ public class TransactionManagerWorker extends Thread implements MessageTypes
     public TransactionManagerWorker( Socket client )
     {
         this.client = client;
-        try 
+        try
         {
             readFromNet = new ObjectInputStream( client.getInputStream() );
             readToNet = new ObjectOutputStream( client.getOutputStream() );
-        } 
-        catch ( IOException e ) 
+        }
+        catch ( IOException e )
         {
             System.out.println( "Failed to open object streams." );
             e.printStackTrace();
@@ -38,11 +39,11 @@ public class TransactionManagerWorker extends Thread implements MessageTypes
     {
         while( keepgoing )
         {
-            try 
+            try
             {
                 message = (Message) readFromNet.readObject();
-            } 
-            catch ( IOException | ClassNotFoundException e ) 
+            }
+            catch ( IOException | ClassNotFoundException e )
             {
                 System.out.println( "Failed to read message from object stream." );
                 System.exit( 1 );
@@ -57,11 +58,11 @@ public class TransactionManagerWorker extends Thread implements MessageTypes
                         transaction = new Transaction( transactionCounter++ );
 
                     }
-                    try 
+                    try
                     {
                         writeToNet.writeObject( transaction.getID() );
-                    } 
-                    catch ( IOException e ) 
+                    }
+                    catch ( IOException e )
                     {
                         System.out.println( "Error opening transaction" );
                     }
@@ -69,6 +70,21 @@ public class TransactionManagerWorker extends Thread implements MessageTypes
                     break;
                 // Closing a transaction
                 case CLOSE_TRANSACTION:
+                    TransactionServer.lockManager.unlock(transaction);
+                    transactions.remove(transaction);
+
+                    try
+                    {
+                      readFromNet.close();
+                      writeToNet.close();
+                      client.close();
+                      keepgoing = false;
+                    }
+                    catch (IOException e)
+                    {
+                      
+                    }
+
             }
         }
     }

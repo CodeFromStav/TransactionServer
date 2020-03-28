@@ -2,6 +2,32 @@
 // Transaction Client class
 public class TransactionClient extends Thread
 {
+
+  // this is the contructor to set up the server??? seems like it reads from a file with a class that does the parsing
+  public TransactionClient(String clientPropertiesFile, String serverPropertiesFile)
+  {
+    try
+    {
+      Properties serverProperties = new PropertyHandler(serverPropertiesFile);
+      host = serverProperties.getProperty("HOST");
+      port = Integer.parseInt(serverProperties.getProperty("PORT"));
+      numberAccounts = Integer.parseInt(serverProperties.getProperty("NUMBER_ACCOUNTS"));
+      initialBalance = Integer.parseInt(serverProperties.getProperty("INITIAL_BALANCE"));
+
+      // establishing client properties
+      Properties clientProperties = new PropertyHandler(clientPropertiesFile);
+      numberTransactions = Integer.parseInt(clientProperties.getProperty("NUMBER_TRANSACTIONS"));
+
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+    }
+
+    log = new StringBuffer("");
+  }
+
+
   @Override
   public void run()
   {
@@ -39,5 +65,10 @@ public class TransactionClient extends Thread
         }
       }.start();
     }
+  }
+
+  public static void main(String[] args)
+  {
+    (new TransactionClient("../../config/TransactionClient.properties", "../../config/TransactionServer.properties")).start();
   }
 }

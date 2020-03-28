@@ -1,5 +1,11 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import transaction.comm.Message;
+import transaction.comm.MessageTypes;
+import transaction.server.TransactionServer;
 
 /*
 TransactionManager.java
@@ -32,10 +38,11 @@ public class TransactionManager implements MessageTypes
 
   public void runTransaction( Socket client )
   {
-    (new TransactionManagerWorker(client)).start(); 
+    (new TransactionManagerWorker(client)).start();
     // accept incoming connections
     // call run() to start up worker threads
   }
+
 
   // Run function for creating worker threads
   public void run()

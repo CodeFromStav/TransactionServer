@@ -9,41 +9,85 @@ import java.net.ServerSocket;
 
 // -On the other hand, your transactional system,
 //  including the server proxy object on the client
-//   side, is absolutely unaware of the assumption of 
-//   such a predefined sequence of activities, i.e. it 
-//   can handle any activities in any order whatsoever, 
+//   side, is absolutely unaware of the assumption of
+//   such a predefined sequence of activities, i.e. it
+//   can handle any activities in any order whatsoever,
 //   without any limitation or underlying assumption.
 
-public class TransactionServer
+public class TransactionServer extends Thread
 {
-  // Initialize serverSocket
-  ServerSocket serverSocket = null; // probably need to assign a port here
-  
-  // Create AccountManager object
-  AccountManager accountManager = new AccountManager();
+  // Otte's code
+  public static boolean transactionView;
+  public static AccountManager accountManager = null;
+  public static TransactionManager transactionManager = null;
+  public static LockManager lockManager = null;
 
-  // Create LockManager object
-  LockManager lockManager = new LockManager();
+  static ServerSocket serverSocket = null;
 
-  // Create TransactionManager object
-  TransactionManager transactionManager = new TransactionManager();
+  public TransactionServer(String serverPropertiesFile)
+  {
+    Properties serverProperties = null;
 
+    // get Properties
+    try
+    {
+      serverProperties = new PropertyHandler(serverPropertiesFile);
+    }
+    catch (Exception e)
+    {
+      System.out.println("[TransactionServer.TransactionServer] Didn't find properties file \"" + serverPropertiesFile + "\"");
+      e.printStackTrace();
+      System.exit(1);
+    }
 
+    // create transaction LockManager
+    transactionView = Boolean.valueOf(serverProperties.getProperty("TRANSACTION_VIEW"));
+    TransactionServer.transactionManager = new TransactionManager();
+    System.out.println("[TransactionServer.TransactionServer] TransactionManager created");
 
-  //Server loop always running in this class
+    // create lock LockManager
+    boolean applyLocking = Boolean.valueOf(serverProperties.getProperty("APPLY_LOCKING"));
+    TransactionServer.lockManager = new LockManager(applyLocking);
+    System.out.println("[TransactionServer.TransactionServer] LockManager created");
+
+    // create account LockManager
+    int numberAccounts = 0;
+    numberAccounts = Integer.parseInt(serverProperties.getProperty("NUMBER_ACCOUNTS"));
+    int initialBalance;
+    initialBalance = Integer.parseInt(serverProperties.getProperty("INITIAL_BALANCE"));
+
+    TransactionServer.accountManager = new AccountManager(numberAccounts, initialBalance);
+    System.out.println("[TransactionServer.TransactionServer] AccountManager created ")
+
+    // create server socket
+    try
+    {
+      serverSocket = new ServerSocket(Integer.parseInt(serverProperties.getProperty("PORT")));
+      System.out.println("[TransactionServer.TransactionServer] ServerSocket created");
+    }
+    catch (IOException ex)
+    {
+      System.out.println("[TransactionServer.TransactionServer] could not create server socket");
+      ex.printStackTrace();
+      System.exit(1);
+    }
+  }
+
+public void run()
+{
+  // run server loop
   while(true)
   {
     try
     {
-      // accept incoming connections
       transactionManager.runTransaction(serverSocket.accept());
     }
-    
-    catch (IOException e)
+    catch (EOException e)
     {
-      //print Error accepting client
-      //print StackTrace
+      System.out.println("[TransactionServer.run] Warning: Error accepting client");
+      e.printStackTrace();
     }
-
   }
+}
+
 }
