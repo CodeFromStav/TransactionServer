@@ -28,7 +28,7 @@ public class TServerProxy implements MessageTypes
   {
     try {
       // open new ServerSocket object with port number '8080'
-      ServerSocket server = new ServerSocket(8080);
+      ServerSocket server = new ServerSocket.getProperty("PORT");
 
       // counter variable for tracking the number of client connections
       int counter = 0;
