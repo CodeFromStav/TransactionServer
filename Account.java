@@ -24,33 +24,32 @@ level constructs like withdrawal and deposit.
 public class Account
 {
 
-  //NOTE: Using constructor in AccountManager.java
-  // int balance;
-  // int accountNum;
+  private int initBalance;
+  private final int accountNumber;
 
-  // public Account( int initBalance, int accountNumber )
-  // {
-  //   this.balance = initBalance;
-  //   this.accountNum = accountNumber;
-  // }
+  public Account( int initBalance, int accountNumber )
+  {
+    this.initBalance = initBalance;
+    this.accountNumber = accountNumber;
+  }
 
   private int getAccountBalance()
   {
-    return this.balance;
+    return initBalance;
   }
 
   private int getAccountNum()
   {
-    return this.accountNum;
+    return accountNumber;
   }
 
   public void setBalance( int newBalance )
   {
-    this.balance = newBalance;
+    this.initBalance = newBalance;
   }
 
   public void setAccountNum( int newAccountNum )
   {
-    this.accountNum = newAccountNum;
+    this.account= newAccountNum;
   }
 }

@@ -34,7 +34,9 @@ public class AccountManager implements TransactionTypes
         (TransactionServer.lockManager).lock(account, transaction, READ_LOCK);
 
         //the above call will wait (if not deadlock). Then continue.
-       TODO://return (getAccount(accountNumber)).getBalance();
+        return (getAccount(accountNumber)).getBalance();
+
+       // TODO://return (getAccount(accountNumber)).getBalance();
 
         system.out.println( "Account Number: " + accountNumber + "\n" );
         system.out.println( "Transaction: " + transaction );

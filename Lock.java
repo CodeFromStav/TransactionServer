@@ -149,4 +149,9 @@ public class Lock implements LockTypes
             transaction.log( "Ignore setting " + getLockTypeString( currentLockType ) + " to " getLockTypeString( newLockType ) + " on account #" + account.getAccountNum() );
         }
     }
+
+    public synchronized int getLockType()
+    {
+      
+    }
 }

@@ -53,7 +53,7 @@ public class TransactionManagerWorker extends Thread implements MessageTypes
             {
                 // Openning a transaction
                 case OPEN_TRANSACTION:
-                    synchronized( transaction )
+                    synchronized( transactions )
                     {
                         transaction = new Transaction( transactionCounter++ );
 

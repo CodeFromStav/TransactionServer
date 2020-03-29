@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import transaction.server.TransactionServer;
+import transaction.server.lock.Lock;
 
 // Transaction class for creating transactions
 public class Transaction

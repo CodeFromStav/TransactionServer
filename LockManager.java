@@ -30,7 +30,7 @@ public class LockManager implements LockTypes
     Lock lock;
     synchronized(this)
     {
-      lock = locks.get(account);
+      lock = theLocks.get(account);
 
       if(lock == null)
       {
