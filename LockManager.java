@@ -64,22 +64,13 @@ public class LockManager implements LockTypes
       while(lockIterator.hasNext())
       {
           currentLock = lockIterator.next();
-          //transaction.log("[LockManager.unLock]      | release " + Lock.getLockTypeString(currentLock.getLockType()) + ", account)
+          transaction.log("[LockManager.unLock]      | release " + Lock.getLockTypeString(currentLock.getLockType()) + ", account #" + currentLock.getAccount());
           currentLock.release(transaction);
           //-------------------------------
 
               //if( lock is empty and lock request is empty */)
               //remove the lock, not needed anymore.
       }
-      // Enumeration e = theLocks.element();
-      // while(e.hasMoreElements())
-      // {
-      //     Lock aLock = (Lock) (e.nextElement());
-      //     if( *trans is a holder of this lock ) //check if lock is being held by this transaction
-      //     {
-      //         aLock.release(trans)
-      //     }
-      // }
   }
 }
 

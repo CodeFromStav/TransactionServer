@@ -20,8 +20,6 @@ public class TransactionManager extends Thread implements MessageTypes
   public static int transactionCounter = 0;
   public static final ArrayList<Transaction> transactions = new ArrayList<>();
 
-  // I dont know what this is supposed to be a list of
-  // ArrayList<Transaction> transactions = new ArrayList<Transaction>;
 
   // Constructor
   public TransactionManager()
@@ -42,28 +40,4 @@ public class TransactionManager extends Thread implements MessageTypes
     // accept incoming connections
     // call run() to start up worker threads
   }
-
-
-  TODO:/* 
-  case READ_REQUEST:
-    accountNumber = (Integer)message.getContent();
-    transaction.log("[TransactionManager.run] READ_REQUEST >>>>>>>>>>>>>>>>>>> account #" + accountNumber ..... );
-    balance - TransactionServer.accountManager.read(accountNumber, transaction);
-    
-    try
-    {
-      writeToNet.writeObject((Integer) balance);
-    }
-    catch (IOException e)
-    {
-      System.out.println("[TransactionManagerWorker.run] READ_REQUEST - Error when writing to object stream");
-    }
-    transaction.log("[TransactionManager.run] READ_REQUEST >>>>>>>>>>>>>>>>>>> account #" + accountNumber ..... );
-    
-    break;
-  
-    case WRITE_REQUEST:
-    */
-
 }
-

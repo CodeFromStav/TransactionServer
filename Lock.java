@@ -25,7 +25,7 @@ public class Lock implements LockTypes
     // Function for acquiring a lock
     public synchronized void acquire( Transaction transaction, int newLockType )
     {
-        //transaction.log("[Lock.acquire]   | try + ")
+        transaction.log("[Lock.acquire]   | try + " + getLockTypeString(newLockType) + " on account #" + account.getNumber());
         while( isConflict(transaction, newLockType ) )/* another transaction holds the lock in conflicting mode */
         {
             try
@@ -83,7 +83,7 @@ public class Lock implements LockTypes
         else
         {
           // do not do anything
-          // transaction.log....
+          transaction.log("[Lock.acquire]        |<----Error, setting" + getLockTypeString(newLockType) + " on account #" + account.getNumber());
         }
     }
 
@@ -152,12 +152,12 @@ public class Lock implements LockTypes
     // Returns type of lock
     public synchronized int getLockType()
     {
-      
+        return currentLockType;
     }
 
     private void addLockRequestor( Transaction requestor, int newLockType )
     {
-
+      lockRequestors.add(requesto)
     }
 
     public String getLockTypeString( int lockType )
