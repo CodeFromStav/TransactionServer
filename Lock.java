@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
@@ -15,13 +17,13 @@ public class Lock implements LockTypes
     public Lock(Account account)
     {
         this.lockHolders = new ArrayList();
-        this.lockReq = new HashMap();
+        this.lockRequestors = new HashMap();
         this.account = account;
         this.currentLockType = EMPTY_LOCK;
     }
 
     // Function for acquiring a lock
-    public synchronized void acquire( TransID trans, LockType newLockType )
+    public synchronized void acquire( Transaction transaction, int newLockType )
     {
         //transaction.log("[Lock.acquire]   | try + ")
         while( isConflict(transaction, newLockType ) )/* another transaction holds the lock in conflicting mode */
@@ -42,10 +44,10 @@ public class Lock implements LockTypes
             }
         }
         // if no transactions hold locks
-        if( lockholders.isEmpty() ) //no TID's hold lock
+        if( lockHolders.isEmpty() ) //no TID's hold lock
         {
             holders.addElement( transaction );
-            currentlockType = newLockType;
+            currentLockType = newLockType;
             transaction.addLock(this);
 
             transaction.log("[Lock.acquire]        |<----woke up, setting" + getLockTypeString(newLockType) + " on account #" + account.getNumber());
@@ -71,15 +73,12 @@ public class Lock implements LockTypes
             lockHolders.add(transaction);
             transaction.addLock(this);
         }
-        else if(!lockHolders.size() == 1 && currentLockType == READ_LOCK && newLockType == WRITE_LOCK)
+        else if(!(lockHolders.size() == 1) && currentLockType == READ_LOCK && newLockType == WRITE_LOCK)
         {
           // when the two above checks fail, this transaction is a lock holders
           // here we check if the lock needs to be promoted, which is onlu possible if this transaction is the only holder
           transaction.log("[Lock.acquire]           | promote" + getLockTypeString(currentLockType) + " to " + getLockTypeString(newLockType) + " on acount" + account.getNumber());
-          currentLockType = newLocktype;
-        }
-
-
+          currentLockType = newLockType;
         }
         else
         {
