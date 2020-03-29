@@ -2,6 +2,14 @@
 // Transaction Client class
 public class TransactionClient extends Thread
 {
+  public static int numberTransactions;
+  public static int numberAccounts;
+  public static int initialBalance;
+
+  public static String host;
+  public static int port;
+
+  public static StringBuffer log;
 
   // this is the contructor to set up the server??? seems like it reads from a file with a class that does the parsing
   public TransactionClient(String clientPropertiesFile, String serverPropertiesFile)
