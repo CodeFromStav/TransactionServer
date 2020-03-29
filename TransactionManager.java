@@ -14,7 +14,7 @@ TransactionManager.java
 -Read/Write requests handled by TransactionWorker
 */
 
-public class TransactionManager implements MessageTypes
+public class TransactionManager extends Thread implements MessageTypes
 {
 
   public static int transactionCounter = 0;

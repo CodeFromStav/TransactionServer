@@ -1,11 +1,8 @@
-<<<<<<< Updated upstream
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-=======
->>>>>>> Stashed changes
 // Transaction Client class
 public class TransactionClient extends Thread
 {

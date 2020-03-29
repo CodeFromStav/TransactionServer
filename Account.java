@@ -33,7 +33,7 @@ public class Account
     this.accountNumber = accountNumber;
   }
 
-  private int getAccountBalance()
+  public int getAccountBalance()
   {
     return initBalance;
   }

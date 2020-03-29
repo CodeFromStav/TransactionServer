@@ -1,8 +1,8 @@
 
 
-// LockTypes class
-public class LockTypes
+// LockTypes interface
+public interface LockTypes
 {
-  public int final WRITE_LOCK = 105;
-  public int final READ_LOCK = 106;
+  public final int WRITE_LOCK = 105;
+  public final int READ_LOCK = 106;
 }

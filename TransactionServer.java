@@ -79,7 +79,7 @@ public class TransactionServer extends Thread
     initialBalance = Integer.parseInt(serverProperties.getProperty("INITIAL_BALANCE"));
 
     TransactionServer.accountManager = new AccountManager(numberAccounts, initialBalance);
-    System.out.println("[TransactionServer.TransactionServer] AccountManager created ")
+    System.out.println("[TransactionServer.TransactionServer] AccountManager created ");
 
     // create server socket
     try
