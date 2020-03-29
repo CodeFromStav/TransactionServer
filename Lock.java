@@ -157,16 +157,17 @@ public class Lock implements LockTypes
 
     private void addLockRequestor( Transaction requestor, int newLockType )
     {
-      lockRequestors.add(requesto)
+      lockRequestors.add(requestor, newLockType);
     }
 
     public String getLockTypeString( int lockType )
     {
-
+      return Integer.toString(lockType);
     }
 
-    private void removeLockRequestor( Transaction requestor, )
+    private void removeLockRequestor( Transaction requestor )
     {
+      lockRequestors.remove(requestor);
 
     }
 }
