@@ -1,4 +1,5 @@
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import transaction.comm.Message;
@@ -45,7 +46,7 @@ public class TServerProxy implements MessageTypes
     }
     catch (Exception ex)
     {
-      System.out.println("[TransactionServerProxy.read] Error occured");
+      System.out.println("[TServerProxy.read] Error occured." );
       ex.printStackTrace();
     }
 
@@ -55,7 +56,20 @@ public class TServerProxy implements MessageTypes
 
   public int write(int accountNumber, int amount)
   {
+    Message writeMessage = new Message( WRITE_REQUEST, accountNumber );
+    Integer balance = null;
 
+    try 
+    {
+      // TODO
+    } 
+    catch (Exception ex) 
+    {
+      System.out.println( "[TServerProxy.write] Error occured." );
+      ex.printStackTrace();
+    }
+
+    return balance;
   }
 
 }

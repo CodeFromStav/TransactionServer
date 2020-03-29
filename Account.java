@@ -26,6 +26,7 @@ public class Account
 
   private int initBalance;
   private final int accountNumber;
+  private int account;
 
   public Account( int initBalance, int accountNumber )
   {

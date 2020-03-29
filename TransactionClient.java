@@ -1,30 +1,57 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 // Transaction Client class
 public class TransactionClient extends Thread
 {
+  // Variable initialization
+  Properties serverProperties = new Properties();
+  InputStream input = null;
+  String host;
+  int port;
+  int numberAccounts;
+  int initialBalance;
+  int numberTransactions;
 
   // this is the contructor to set up the server??? seems like it reads from a file with a class that does the parsing
   public TransactionClient(String clientPropertiesFile, String serverPropertiesFile)
   {
     try
     {
-      Properties serverProperties = new PropertyHandler(serverPropertiesFile);
+      input = new FileInputStream( "ServerProperties.properties" );
+      serverProperties.load( input );
+
       host = serverProperties.getProperty("HOST");
       port = Integer.parseInt(serverProperties.getProperty("PORT"));
       numberAccounts = Integer.parseInt(serverProperties.getProperty("NUMBER_ACCOUNTS"));
       initialBalance = Integer.parseInt(serverProperties.getProperty("INITIAL_BALANCE"));
 
       // establishing client properties
-      Properties clientProperties = new PropertyHandler(clientPropertiesFile);
-      numberTransactions = Integer.parseInt(clientProperties.getProperty("NUMBER_TRANSACTIONS"));
+      numberTransactions = Integer.parseInt(serverProperties.getProperty("NUMBER_TRANSACTIONS"));
 
     }
     catch (Exception ex)
     {
       ex.printStackTrace();
     }
+    finally
+    {
+      if( input != null )
+      {
+        try 
+        {
+          input.close();
+        } 
+        catch ( IOException e ) 
+        {
+          e.printStackTrace();
+        }
+      }
+    }
 
-    log = new StringBuffer("");
+    StringBuffer log = new StringBuffer("");
   }
 
 
@@ -43,7 +70,7 @@ public class TransactionClient extends Thread
         @Override
         public void run()
         {
-          TransactionServerProxy transaction = new TransactionServerProxy( host, port );
+          TServerProxy transaction = new TServerProxy( host, port );
           int transID = transaction.openTransaction();
           System.out.println( "transaction #" + transID + " started" );
 
