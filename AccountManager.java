@@ -15,7 +15,7 @@ public class AccountManager implements LockTypes
     int accountNum;
     int accountBal;
     private int transactionCode; //may not be necessary
-    ArrayList<Account> accounts;
+    public static final ArrayList<Account> accounts = new ArrayList<>();
 
 
     // Constructor (creates account blueprint)
