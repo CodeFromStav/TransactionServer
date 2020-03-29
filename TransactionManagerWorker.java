@@ -5,7 +5,7 @@ import java.net.Socket;
 
 
 // TransactionManagerWorker handles openTransaction requests, write requests, read requests, and closeTransaction requests
-public class TransactionManagerWorker extends Thread implements MessageTypes
+public class TransactionManagerWorker extends TransactionManager implements Runnable
 {
     // Variable initialization
     Socket client = null;

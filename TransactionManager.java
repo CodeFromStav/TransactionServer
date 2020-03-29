@@ -17,8 +17,8 @@ TransactionManager.java
 public class TransactionManager implements MessageTypes
 {
 
-  private static int transactionCounter = 0;
-  private static final ArrayList<Transaction> transactions = new ArrayList<>();
+  public static int transactionCounter = 0;
+  public static final ArrayList<Transaction> transactions = new ArrayList<>();
 
   // I dont know what this is supposed to be a list of
   // ArrayList<Transaction> transactions = new ArrayList<Transaction>;

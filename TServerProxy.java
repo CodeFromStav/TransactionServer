@@ -1,6 +1,6 @@
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
 import java.net.Socket;
 import transaction.comm.Message;
 import transaction.comm.MessageTypes;
