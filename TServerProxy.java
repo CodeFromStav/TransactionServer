@@ -26,7 +26,8 @@ public class TServerProxy implements MessageTypes
 
   public int openTransaction()
   {
-    try {
+    try
+    {
       // open new ServerSocket object with port number '8080'
       ServerSocket server = new ServerSocket.getProperty("PORT");
 
@@ -37,7 +38,8 @@ public class TServerProxy implements MessageTypes
       System.out.println("Server started...");
 
       // echo server runs until manually terminated by server user
-      while (true) {
+      while (true)
+      {
           // increment counter to account for new client connection
           counter++;
 
@@ -53,9 +55,11 @@ public class TServerProxy implements MessageTypes
           // start newly created thread
           newEchoThread.start();
       }
-  } catch (Exception ex) {
+    }
+   catch (Exception ex)
+   {
       System.out.println("An Exception");
-  }
+   }
   }
 
   public void closeTransaction()
