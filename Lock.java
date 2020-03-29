@@ -149,8 +149,24 @@ public class Lock implements LockTypes
         }
     }
 
+    // Returns type of lock
     public synchronized int getLockType()
     {
       
+    }
+
+    private void addLockRequestor( Transaction requestor, int newLockType )
+    {
+
+    }
+
+    public String getLockTypeString( int lockType )
+    {
+
+    }
+
+    private void removeLockRequestor( Transaction requestor, )
+    {
+
     }
 }
