@@ -12,7 +12,7 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
     // Variable initialization
     Socket client = null;
     ObjectInputStream readFromNet = null;
-    ObjectOutputStream readToNet = null;
+    ObjectOutputStream writeToNet = null;
     Message message = null;
     Transaction transaction = null;
     int accountNumber = 0;
@@ -26,7 +26,7 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
         try
         {
             readFromNet = new ObjectInputStream( client.getInputStream() );
-            readToNet = new ObjectOutputStream( client.getOutputStream() );
+            writeToNet = new ObjectOutputStream( client.getOutputStream() );
         }
         catch ( IOException e )
         {
