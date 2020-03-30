@@ -37,8 +37,9 @@ public class TServerProxy implements MessageTypes
         // assign the object input and output
         writeToNet = new ObjectOutputStream(dbConnection.getOutputStream());
         readFromNet = new ObjectInputStream(dbConnection.getInputStream());
-        // returns unique ID for the transaction
-        return UUID.randomUUID();
+        transID++;
+        return transID;
+
     }
     catch (IOException e)
     {
