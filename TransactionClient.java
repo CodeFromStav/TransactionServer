@@ -3,7 +3,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.UUID;
 
 // Transaction Client class
 public class TransactionClient extends Thread
