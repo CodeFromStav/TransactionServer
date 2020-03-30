@@ -39,7 +39,8 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
             System.exit( 1 );
         }
     }
-
+    
+  //runs as subclass to TransactionManagerWorker
     @Override
     public void run()
     {
@@ -57,7 +58,7 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
             // Switch statement to check and process type of message
             switch( message.getType() )
             {
-                // Openning a transaction
+                // Opening a transaction
                 case OPEN_TRANSACTION:
                     synchronized( transactions )
                     {
@@ -120,6 +121,7 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
 
                     break;
 
+                // handles the Write request transactions
                 case WRITE_REQUEST:
 
                     Object[] content = (Object[]) message.getContent();

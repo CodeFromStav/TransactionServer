@@ -68,19 +68,25 @@ public class TServerProxy implements MessageTypes
     System.out.println("[TransactionServerProxy.close] the transaction has ended");
 
   }
-
+  
+  // read the account number balance
   public int read(int accountNumber)
   {
     Message readMessage = new Message(READ_REQUEST, accountNumber);
+    Message fromFile;
     Integer balance = null;
 
     try
     {
+    
+      // 	
       writeToNet.writeObject(readMessage);
-      writeToNet.flush();
-      System.out.println((Message) readFromNet.readObject());
-//      balance = (Integer)readFromNet.readObject();
-       
+   
+      // 
+      fromFile = (Message)readFromNet.readObject();
+      balance = (Integer) fromFile.getContent();
+      
+           
     }
     catch (Exception ex)
     {
@@ -94,14 +100,12 @@ public class TServerProxy implements MessageTypes
 
   public int write(int accountNumber, int amount)
   {
-    Message writeMessage = new Message( WRITE_REQUEST, accountNumber );
-    Integer balance = null;
+    Message writeMessage = new Message( WRITE_REQUEST, amount );
+    Integer balance = amount;
 
     try
     {
       writeToNet.writeObject(writeMessage);
-      balance = (Integer) readFromNet.readObject();
-      // TODO
     }
     catch (Exception ex)
     {

@@ -12,10 +12,10 @@ TransactionManager.java
 -open up one connection per transaction, stays open until a close transaction is received.
 -Read/Write requests handled by TransactionWorker
 */
-
 public class TransactionManager implements MessageTypes
 {
 
+  // variables
   public static int transactionCounter = 0;
   public static final ArrayList<Transaction> transactions = new ArrayList<>();
 
@@ -32,7 +32,7 @@ public class TransactionManager implements MessageTypes
     return transactions;
   }
 
-
+  // function for running the threads
   public void runTransaction( Socket client )
   {
 	  TransactionManagerWorker tmw = new TransactionManagerWorker(client);

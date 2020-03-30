@@ -3,6 +3,7 @@ package transaction.client;
 import java.util.Properties;
 import utils.PropertyHandler;
 
+
 // Transaction Client class
 public class TransactionClient extends Thread
 {
@@ -46,6 +47,7 @@ public class TransactionClient extends Thread
     int index;
     for ( index = 0; index < numberTransactions; index++ )
     {
+      int index_1 = 1;
       new Thread()
       {
         @Override
@@ -59,7 +61,7 @@ public class TransactionClient extends Thread
           int accountTo = (int) Math.floor(Math.random() * numberAccounts );
           int amount = (int) Math.ceil(Math.random() * initialBalance );
           int balance;
-          System.out.println( "\ttransaction #" + transID + ", $" + amount + " " + accountFrom + "->" + accountTo );
+          System.out.println( "\ttransaction #" + index_1 + ", $" + amount + " " + accountFrom + "->" + accountTo );
           
           balance = transaction.read(accountFrom);
           
@@ -74,14 +76,13 @@ public class TransactionClient extends Thread
           System.out.println("transaction #" + transID + " finished");
         }
       }.start();
+      
     }
   }
 
   public static void main(String[] args)
   {
 	  (new TransactionClient("../config/ServerProperties.properties")).start();
+	  
   }
-
 }
-
-

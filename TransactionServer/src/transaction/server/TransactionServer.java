@@ -48,7 +48,7 @@ public class TransactionServer extends Thread
       e.printStackTrace();
       System.exit(1);
     }
-
+    
     // create transaction LockManager
     transactionView = Boolean.valueOf(serverProperties.getProperty("TRANSACTION_VIEW"));
     TransactionServer.transactionManager = new TransactionManager();
@@ -65,12 +65,14 @@ public class TransactionServer extends Thread
     int initialBalance;
     initialBalance = Integer.parseInt(serverProperties.getProperty("INITIAL_BALANCE"));
 
+    // create AccountManager
     TransactionServer.accountManager = new AccountManager(numberAccounts, initialBalance);
     System.out.println("[TransactionServer.TransactionServer] AccountManager created ");
 
     // create server socket
     try
     {
+      // try to create the server socket
       int port = Integer.parseInt(serverProperties.getProperty("PORT"));
       serverSocket = new ServerSocket(port);
       

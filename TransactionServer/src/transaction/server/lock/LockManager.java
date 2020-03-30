@@ -9,8 +9,7 @@ import transaction.server.lock.LockTypes;
 
 public class LockManager implements LockTypes
 {
-
-
+  // variable instantiating
   private static HashMap<Account, Lock> theLocks;
   private static boolean applyLocking;
 
@@ -21,21 +20,14 @@ public class LockManager implements LockTypes
     this.applyLocking = applyLocking;
   }
 
+//function for setting lock, requiring three parameters
   public void lock(Account account, Transaction transaction, int lockType)
   {
     if(!applyLocking)
     {
-<<<<<<< HEAD
       return;
     }
 
-=======
-      final int WRITE_LOCK = 105;
-      final int READ_LOCK = 106;
-      final int EMPTY_LOCK = 107;
-    }
-    
->>>>>>> d046ee526050c78f4874e47a5d1752ede3cb4c25
     Lock lock;
     synchronized(this)
     {
@@ -52,6 +44,7 @@ public class LockManager implements LockTypes
     lock.acquire(transaction, lockType);
   }
 
+//function for unLocking a transaction based on the transaction passed in
   public synchronized void unLock( Transaction transaction )
   {
       //return if no locking

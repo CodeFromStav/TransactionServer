@@ -25,11 +25,13 @@ public class Transaction
         return transID;
     }
 
+    // getter for the locks
     public ArrayList<Lock> getLocks()
     {
         return locks;
     }
 
+    // getter for the log
     public StringBuffer getLog()
     {
         return log;
@@ -42,7 +44,7 @@ public class Transaction
     }
     
     
-
+    
     // Logging function
     public void log( String logString )
     {
