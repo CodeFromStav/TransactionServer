@@ -38,7 +38,7 @@ public class Account
     return initBalance;
   }
 
-  private int getAccountNum()
+  public int getAccountNum()
   {
     return accountNumber;
   }
