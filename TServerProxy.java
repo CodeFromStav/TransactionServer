@@ -4,6 +4,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import transaction.comm.Message;
 import transaction.comm.MessageTypes;
+import java.net.Socket;
 
 // Transaction Server Proxy class
 //Transaction client hits proxy, then the proxy server manages workers.
@@ -26,44 +27,64 @@ public class TServerProxy implements MessageTypes
 
   public int openTransaction()
   {
+    // create socket connection
     try
     {
-      // open new ServerSocket object with port number '8080'
-      ServerSocket server = new ServerSocket.getProperty("PORT");
-
-      // counter variable for tracking the number of client connections
-      int counter = 0;
-
-      // confirm server has started
-      System.out.println("Server started...");
-
-      // echo server runs until manually terminated by server user
-      while (true)
-      {
-          // increment counter to account for new client connection
-          counter++;
-
-          // server accepts the client connection request
-          Socket serverClient = server.accept();
-
-          // control message for when a client connects
-          System.out.println("Client No: " + counter + " connected");
-
-          // create a new thread for new client; pass in client socket and counter number
-          EchoThread newEchoThread = new EchoThread(serverClient, counter);
-
-          // start newly created thread
-          newEchoThread.start();
-      }
+        // connect to the server loop
+        dbConnection = new Socket(host, port);
+        System.out.println("[TransactionServerProxy.open] Proxy connected!");
+        // assign the object input and output
+        writeToNet = new ObjectOutputStream(dbConnection.getOutputStream());
+        readFromNet = new ObjectInputStream(dbConnection.getInputStream());
+        // returns unique ID for the transaction
+        return UUID.randomUUID();
     }
-   catch (Exception ex)
-   {
-      System.out.println("An Exception");
-   }
+    catch (IOException e)
+    {
+      System.out.println("[TransactionServerProxy.open] Proxy error occurred!");
+      e.printStackTrace();
+    }
+   //  try
+   //  {
+   //    // I do not believe that the code below is correct
+   //    // open new ServerSocket object with port number '8080'
+   //    ServerSocket server = new ServerSocket.getProperty("PORT");
+   //
+   //    // counter variable for tracking the number of client connections
+   //    int counter = 0;
+   //
+   //    // confirm server has started
+   //    System.out.println("Server started...");
+   //
+   //    // echo server runs until manually terminated by server user
+   //    while (true)
+   //    {
+   //        // increment counter to account for new client connection
+   //        counter++;
+   //
+   //        // server accepts the client connection request
+   //        Socket serverClient = server.accept();
+   //
+   //        // control message for when a client connects
+   //        System.out.println("Client No: " + counter + " connected");
+   //
+   //        // create a new thread for new client; pass in client socket and counter number
+   //        EchoThread newEchoThread = new EchoThread(serverClient, counter);
+   //
+   //        // start newly created thread
+   //        newEchoThread.start();
+   //    }
+   //  }
+   // catch (Exception ex)
+   // {
+   //   ex.printStackTrace();
+   //    System.out.println("An Exception");
+   // }
   }
 
   public void closeTransaction()
   {
+    dbConnection.close();
 
   }
 
@@ -79,7 +100,7 @@ public class TServerProxy implements MessageTypes
     }
     catch (Exception ex)
     {
-      System.out.println("[TServerProxy.read] Error occured." );
+      System.out.println("[TServerProxy.read] Error occured while trying to read " );
       ex.printStackTrace();
     }
 
@@ -92,11 +113,13 @@ public class TServerProxy implements MessageTypes
     Message writeMessage = new Message( WRITE_REQUEST, accountNumber );
     Integer balance = null;
 
-    try 
+    try
     {
+      writeToNet.writeObject(writeMessage);
+      balance (Integer) writeFromNet.readObject();
       // TODO
-    } 
-    catch (Exception ex) 
+    }
+    catch (Exception ex)
     {
       System.out.println( "[TServerProxy.write] Error occured." );
       ex.printStackTrace();

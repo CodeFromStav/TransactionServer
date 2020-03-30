@@ -1,7 +1,8 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
+import java.util.Properties
+import java.util.UUID;
 
 // Transaction Client class
 public class TransactionClient extends Thread
@@ -40,11 +41,11 @@ public class TransactionClient extends Thread
     {
       if( input != null )
       {
-        try 
+        try
         {
           input.close();
-        } 
-        catch ( IOException e ) 
+        }
+        catch ( IOException e )
         {
           e.printStackTrace();
         }

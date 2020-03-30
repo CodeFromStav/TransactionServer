@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
+import transaction.server.TransactionServer;
+import transaction.server.lock.Lock;
+import transaction.server.transaction.Transaction;
 
 // Lock class containing basic lock functionality
 public class Lock implements LockTypes
@@ -131,7 +134,7 @@ public class Lock implements LockTypes
                 // we will have a conflict
                 transaction.log( "Current lock: " + getLockTypeString( currentLockType ) + " and new lock: " + getLockTypeString( newLockType ) + " are conflicting." );
                 return true;
-                
+
             }
         }
         else // more than one lock in lockHolders and it contains the transaction
@@ -153,7 +156,7 @@ public class Lock implements LockTypes
                 // we will have a conflict
                 transaction.log( "Current lock: " + getLockTypeString( currentLockType ) + " and new lock: " + getLockTypeString( newLockType ) + " are conflicting." );
                 return true;
-                
+
             }
         }
         return false;

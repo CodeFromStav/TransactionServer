@@ -43,17 +43,6 @@ public class LockManager implements LockTypes
     lock.acquire(transaction, locktype);
   }
 
-  // public void setLock( Object object, TransID trans, LockType lockType)
-  // {
-  //     Lock foundLock;
-  //     synchronized (this)
-  //     {
-  //         //find the lock associated with object
-  //         //if there isnt one, create it and add to hashtable
-  //     }
-  // }
-  // (this is all terribly inefficient)
-
   public synchronized void unLock( TransID trans)
   {
       //return if no locking
