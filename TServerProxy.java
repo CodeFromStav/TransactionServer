@@ -1,10 +1,7 @@
-package transaction.client;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
-import transaction.comm.Message;
-import transaction.comm.MessageTypes;
 import java.net.Socket;
 
 // Transaction Server Proxy class
@@ -20,7 +17,7 @@ public class TServerProxy implements MessageTypes
   private ObjectInputStream readFromNet = null;
   private Integer transID = 0;
 
-  TServerProxy(String host, int port) throws Exception
+  TServerProxy(String host, int port) 
   {
     this.host = host;
     this.port = port;
@@ -86,7 +83,7 @@ public class TServerProxy implements MessageTypes
 
   public void closeTransaction()
   {
-    dbConnection.close
+    dbConnection.close();
     System.out.println("[TransactionServerProxy.close] the transaction has ended");
 
   }

@@ -1,9 +1,8 @@
-package transaction.client;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties
+import java.util.Properties;
 import java.util.UUID;
 
 // Transaction Client class
@@ -19,7 +18,7 @@ public class TransactionClient extends Thread
   int numberTransactions;
 
   // this is the contructor to set up the server??? seems like it reads from a file with a class that does the parsing
-  public TransactionClient(String clientPropertiesFile, String serverPropertiesFile)
+  public TransactionClient(String serverPropertiesFile)
   {
     try
     {
@@ -99,6 +98,6 @@ public class TransactionClient extends Thread
 
   public static void main(String[] args)
   {
-    (new TransactionClient("../../config/TransactionClient.properties", "../../config/TransactionServer.properties")).start();
+    (new TransactionClient("TransactionServer.properties")).start();
   }
 }
