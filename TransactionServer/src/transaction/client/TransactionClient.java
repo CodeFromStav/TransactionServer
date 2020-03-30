@@ -18,7 +18,11 @@ public class TransactionClient extends Thread
   int numberTransactions;
 
   // this is the constructor to set up the server??? seems like it reads from a file with a class that does the parsing
+<<<<<<< HEAD
   public TransactionClient(String propertiesFile)
+=======
+  public TransactionClient(String serverPropertiesFile)
+>>>>>>> 4de71d5c6a61b4902222006070032ef782ed435e
   {
     try
     {
@@ -101,6 +105,6 @@ public class TransactionClient extends Thread
 
   public static void main(String[] args)
   {
-    (new TransactionClient("../../config/TransactionClient.properties", "../../config/TransactionServer.properties")).start();
+    (new TransactionClient("../../config/TransactionServer.properties")).start();
   }
 }
