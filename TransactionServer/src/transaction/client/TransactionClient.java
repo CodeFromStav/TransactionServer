@@ -18,18 +18,21 @@ public class TransactionClient extends Thread
   int numberTransactions;
 
   // this is the constructor to set up the server??? seems like it reads from a file with a class that does the parsing
-  public TransactionClient(String clientPropertiesFile, String serverPropertiesFile)
+  public TransactionClient(String propertiesFile)
   {
     try
     {
-      input = new FileInputStream( "ServerProperties.properties" );
-      serverProperties.load( input );
+      // input = new FileInputStream( "ServerProperties.properties" );
+      // serverProperties.load( input );
+      Properties serverProperties = new PropertyHandler(propertiesFile);
 
       host = serverProperties.getProperty("HOST");
       port = Integer.parseInt(serverProperties.getProperty("PORT"));
       numberAccounts = Integer.parseInt(serverProperties.getProperty("NUMBER_ACCOUNTS"));
       initialBalance = Integer.parseInt(serverProperties.getProperty("INITIAL_BALANCE"));
 
+      
+      Properties serverProperties = new PropertyHandler(propertiesFile);
       // establishing client properties
       numberTransactions = Integer.parseInt(serverProperties.getProperty("NUMBER_TRANSACTIONS"));
 
