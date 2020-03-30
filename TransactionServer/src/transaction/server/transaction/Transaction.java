@@ -40,6 +40,8 @@ public class Transaction
     {
         locks.add( lock );
     }
+    
+    
 
     // Logging function
     public void log( String logString )

@@ -6,11 +6,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import transaction.comm.Message;
 import transaction.comm.MessageTypes;
+import java.io.*;
 
 // Transaction Server Proxy class
 //Transaction client hits proxy, then the proxy server manages workers.
 //represents transaction, which spins threads.
-public class TServerProxy implements MessageTypes
+public class TServerProxy implements MessageTypes 
 {
   String host = null;
   int port;
@@ -35,26 +36,30 @@ public class TServerProxy implements MessageTypes
         dbConnection = new Socket(host, port);
         System.out.println("[TransactionServerProxy.open] Proxy connected!");
         // assign the object input and output
-        writeToNet = new ObjectOutputStream(dbConnection.getOutputStream());
-        readFromNet = new ObjectInputStream(dbConnection.getInputStream());
+        writeToNet = new ObjectOutputStream(new FileOutputStream("test.txt"));
+        readFromNet = new ObjectInputStream(new FileInputStream("test.txt"));
         transID++;
-        return transID;
 
     }
     catch (IOException e)
     {
       System.out.println("[TransactionServerProxy.open] Proxy error occurred!");
       e.printStackTrace();
-      return 0;
     }
+    
+    return transID;
 
   }
+  
 
+  // close the transaction that was established
   public void closeTransaction()
   {
 	try 
 	{
 		dbConnection.close();
+		writeToNet.close();
+		readFromNet.close();
 	}
     catch (IOException e)
 	{
@@ -72,7 +77,10 @@ public class TServerProxy implements MessageTypes
     try
     {
       writeToNet.writeObject(readMessage);
-      balance = (Integer) readFromNet.readObject();
+      writeToNet.flush();
+      System.out.println((Message) readFromNet.readObject());
+//      balance = (Integer)readFromNet.readObject();
+       
     }
     catch (Exception ex)
     {

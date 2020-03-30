@@ -1,8 +1,5 @@
 package transaction.client;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 import utils.PropertyHandler;
 
@@ -10,8 +7,6 @@ import utils.PropertyHandler;
 public class TransactionClient extends Thread
 {
   // Variable initialization
-  Properties serverProperties = new Properties();
-  InputStream input = null;
   String host;
   int port;
   int numberAccounts;
@@ -65,10 +60,12 @@ public class TransactionClient extends Thread
           int amount = (int) Math.ceil(Math.random() * initialBalance );
           int balance;
           System.out.println( "\ttransaction #" + transID + ", $" + amount + " " + accountFrom + "->" + accountTo );
-
+          
           balance = transaction.read(accountFrom);
+          
           transaction.write( accountFrom, balance - amount );
 
+          
           balance = transaction.read(accountTo);
           transaction.write( accountTo, balance + amount );
 

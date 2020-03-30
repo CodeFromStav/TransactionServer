@@ -1,8 +1,6 @@
 package transaction.server;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.util.*;
 import transaction.server.account.AccountManager;
@@ -73,7 +71,10 @@ public class TransactionServer extends Thread
     // create server socket
     try
     {
-      serverSocket = new ServerSocket(Integer.parseInt(serverProperties.getProperty("PORT")));
+      int port = Integer.parseInt(serverProperties.getProperty("PORT"));
+      serverSocket = new ServerSocket(port);
+      
+      
       System.out.println("[TransactionServer.TransactionServer] ServerSocket created");
     }
     catch (IOException ex)

@@ -25,11 +25,17 @@ public class LockManager implements LockTypes
   {
     if(!applyLocking)
     {
+<<<<<<< HEAD
+      return;
+    }
+
+=======
       final int WRITE_LOCK = 105;
       final int READ_LOCK = 106;
       final int EMPTY_LOCK = 107;
     }
     
+>>>>>>> d046ee526050c78f4874e47a5d1752ede3cb4c25
     Lock lock;
     synchronized(this)
     {

@@ -99,8 +99,7 @@ public class Lock implements LockTypes
 
             if( lockRequestors.isEmpty() )
             {
-                // removeLockRequestor( transaction );
-                currentLockType = NO_LOCK;
+            	currentLockType = 0;
             }
         }
         notifyAll();
