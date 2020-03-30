@@ -82,6 +82,9 @@ public class TransactionClient extends Thread
 
   public static void main(String[] args)
   {
-	  (new TransactionClient("../../config/ServerProperties.properties")).start();
+	  (new TransactionClient("../config/ServerProperties.properties")).start();
   }
+
 }
+
+
