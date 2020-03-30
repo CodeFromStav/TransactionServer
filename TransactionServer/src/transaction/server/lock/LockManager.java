@@ -24,10 +24,9 @@ public class LockManager implements LockTypes
   public void lock(Account account, Transaction transaction, int lockType)
   {
     if(!applyLocking)
-    {
-      return;
-    }
-
+    {public final int WRITE_LOCK = 105;
+      public final int READ_LOCK = 106;
+      public final int EMPTY_LOCK = 107;
     Lock lock;
     synchronized(this)
     {
