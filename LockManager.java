@@ -1,4 +1,4 @@
-
+package transaction.server.lock;
 // LockManager (pseudocode is in the book lock.java, lockManager.java)
 import java.util.HashMap;
 import transaction.server.account.Account;

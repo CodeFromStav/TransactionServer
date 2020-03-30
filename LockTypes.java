@@ -1,4 +1,4 @@
-
+package transaction.server.lock;
 
 // LockTypes interface
 public interface LockTypes

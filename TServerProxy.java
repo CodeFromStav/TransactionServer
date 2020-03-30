@@ -1,3 +1,4 @@
+package transaction.client;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -84,7 +85,8 @@ public class TServerProxy implements MessageTypes
 
   public void closeTransaction()
   {
-    dbConnection.close();
+    dbConnection.close
+    System.out.println("[TransactionServerProxy.close] the transaction has ended");
 
   }
 

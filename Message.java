@@ -1,3 +1,5 @@
+package transaction.comm;
+
 import java.io.Serializable;
 
 // Message functions

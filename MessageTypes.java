@@ -1,3 +1,4 @@
+package transaction.comm;
 
 // MessageTypes interface
 public interface MessageTypes

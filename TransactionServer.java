@@ -1,3 +1,5 @@
+package transaction.server;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,11 +53,11 @@ public class TransactionServer extends Thread
     {
       if( input != null )
       {
-        try 
+        try
         {
           input.close();
-        } 
-        catch ( IOException e ) 
+        }
+        catch ( IOException e )
         {
           e.printStackTrace();
         }
