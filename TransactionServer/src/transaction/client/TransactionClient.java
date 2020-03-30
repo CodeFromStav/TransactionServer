@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import utils.PropertyHandler;
 
 // Transaction Client class
 public class TransactionClient extends Thread
@@ -18,46 +19,22 @@ public class TransactionClient extends Thread
   int numberTransactions;
 
   // this is the constructor to set up the server??? seems like it reads from a file with a class that does the parsing
-<<<<<<< HEAD
   public TransactionClient(String propertiesFile)
-=======
-  public TransactionClient(String serverPropertiesFile)
->>>>>>> 4de71d5c6a61b4902222006070032ef782ed435e
   {
     try
     {
-      // input = new FileInputStream( "ServerProperties.properties" );
-      // serverProperties.load( input );
       Properties serverProperties = new PropertyHandler(propertiesFile);
-
       host = serverProperties.getProperty("HOST");
       port = Integer.parseInt(serverProperties.getProperty("PORT"));
       numberAccounts = Integer.parseInt(serverProperties.getProperty("NUMBER_ACCOUNTS"));
       initialBalance = Integer.parseInt(serverProperties.getProperty("INITIAL_BALANCE"));
 
-      
-      Properties serverProperties = new PropertyHandler(propertiesFile);
-      // establishing client properties
       numberTransactions = Integer.parseInt(serverProperties.getProperty("NUMBER_TRANSACTIONS"));
 
-    }
+    } 
     catch (Exception ex)
     {
       ex.printStackTrace();
-    }
-    finally
-    {
-      if( input != null )
-      {
-        try
-        {
-          input.close();
-        }
-        catch ( IOException e )
-        {
-          e.printStackTrace();
-        }
-      }
     }
 
     StringBuffer log = new StringBuffer("");
@@ -105,6 +82,6 @@ public class TransactionClient extends Thread
 
   public static void main(String[] args)
   {
-    (new TransactionClient("../../config/TransactionServer.properties")).start();
+	  (new TransactionClient("../../config/ServerProperties.properties")).start();
   }
 }
