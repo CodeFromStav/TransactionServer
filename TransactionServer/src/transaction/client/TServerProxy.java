@@ -16,12 +16,13 @@ public class TServerProxy implements MessageTypes
   String host = null;
   int port;
 
-  private Socket dbConnection = null;
-  private ObjectOutputStream writeToNet = null;
-  private ObjectInputStream readFromNet = null;
-  private Integer transID = 0;
+  // Four variables below were all private previously
+  Socket dbConnection = null;
+  ObjectOutputStream writeToNet = null;
+  ObjectInputStream readFromNet = null;
+  Integer transID = 0;
 
-  TServerProxy(String host, int port)
+  public TServerProxy(String host, int port)
   {
     this.host = host;
     this.port = port;
@@ -34,16 +35,17 @@ public class TServerProxy implements MessageTypes
     {
         // connect to the server loop
         dbConnection = new Socket(host, port);
-        System.out.println("[TransactionServerProxy.open] Proxy connected!");
+        System.out.println("[TServerProxy.open] Proxy connected!");
         // assign the object input and output
-        writeToNet = new ObjectOutputStream(new FileOutputStream("test.txt"));
-        readFromNet = new ObjectInputStream(new FileInputStream("test.txt"));
+        writeToNet = new ObjectOutputStream( dbConnection.getOutputStream() );
+        readFromNet = new ObjectInputStream( dbConnection.getInputStream() );
         transID++;
+        System.out.println( "TServerProxy streams are set up." );
 
     }
     catch (IOException e)
     {
-      System.out.println("[TransactionServerProxy.open] Proxy error occurred!");
+      System.out.println("[TServerProxy.open] Proxy error occurred!");
       e.printStackTrace();
     }
     
@@ -63,9 +65,9 @@ public class TServerProxy implements MessageTypes
 	}
     catch (IOException e)
 	{
-    	System.out.println("[TransactionServerProxy.open] Proxy error occurred when trying to close");
+    	System.out.println("[TServerProxy.open] Proxy error occurred when trying to close");
 	}
-    System.out.println("[TransactionServerProxy.close] the transaction has ended");
+    System.out.println("[TServerProxy.close] the transaction has ended");
 
   }
   
@@ -73,18 +75,20 @@ public class TServerProxy implements MessageTypes
   public int read(int accountNumber)
   {
     Message readMessage = new Message(READ_REQUEST, accountNumber);
-    Message fromFile;
     Integer balance = null;
 
     try
     {
     
       // 	
+      System.out.println( "Attempting to send read request...");
       writeToNet.writeObject(readMessage);
+      System.out.println( "Read request received..." );
    
       // 
-      fromFile = (Message)readFromNet.readObject();
-      balance = (Integer) fromFile.getContent();
+      System.out.println( "Reading from read request now..." );
+      balance = (Integer) readFromNet.readObject();
+      System.out.println( "Balance is: " + balance );
       
            
     }

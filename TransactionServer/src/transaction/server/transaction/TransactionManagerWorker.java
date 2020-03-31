@@ -1,5 +1,7 @@
 package transaction.server.transaction;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.io.ObjectInputStream;
@@ -31,6 +33,7 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
         {
             readFromNet = new ObjectInputStream( client.getInputStream() );
             writeToNet = new ObjectOutputStream( client.getOutputStream() );
+            System.out.println( "TransactionManagerWorker streams are set up." );
         }
         catch ( IOException e )
         {
@@ -53,6 +56,7 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
             catch ( IOException | ClassNotFoundException e )
             {
                 System.out.println( "Failed to read message from object stream." );
+                e.printStackTrace();
                 System.exit( 1 );
             }
             // Switch statement to check and process type of message
@@ -105,6 +109,7 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
                     // Read a transaction
                 case READ_REQUEST:
                     accountNumber = (Integer)message.getContent();
+                    System.out.println( "Account number is: " + accountNumber );
                     transaction.log("[TransactionManagerWorker.run] READ_REQUEST >>>>>>>>>> account #" + accountNumber);
                     balance = TransactionServer.accountManager.read(accountNumber, transaction);
 

@@ -1,3 +1,4 @@
+
 package transaction.server;
 
 import java.io.IOException;
@@ -94,7 +95,9 @@ public void run()
   {
     try
     {
+      System.out.println( "Accepting connections now..." );
       transactionManager.runTransaction(serverSocket.accept());
+      System.out.println( "ServerSocket has accepted..." );
     }
     catch (IOException e)
     {

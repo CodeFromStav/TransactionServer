@@ -35,9 +35,11 @@ public class TransactionManager implements MessageTypes
   // function for running the threads
   public void runTransaction( Socket client )
   {
+	  System.out.println( "Attempting to create TransactionManagerWorker thread..." );
 	  TransactionManagerWorker tmw = new TransactionManagerWorker(client);
 	  Thread workerThread = new Thread(tmw);
 	  workerThread.start();
+	  System.out.println( "Created TransactionManagerWorker thread..." );
     // accept incoming connections
     // call run() to start up worker threads
   }
