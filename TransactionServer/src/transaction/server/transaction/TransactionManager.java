@@ -3,9 +3,6 @@ package transaction.server.transaction;
 import java.net.Socket;
 import java.util.ArrayList;
 import transaction.comm.MessageTypes;
-import transaction.server.transaction.TransactionManagerWorker;
-
-
 
 /*
 TransactionManager.java

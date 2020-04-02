@@ -74,8 +74,7 @@ public class TransactionManagerWorker extends TransactionManager
                     {
                         System.out.println( "Error opening transaction" );
                     }
-                    transaction.log( "OPEN_TRANSACTION #" + transaction.getID() );
-                    System.out.println("SHIT WAS OPENED");
+                    transaction.log( " OPEN_TRANSACTION #" + transaction.getID() );
                     break;
                 // Closing a transaction
                 case CLOSE_TRANSACTION:
@@ -102,7 +101,6 @@ public class TransactionManagerWorker extends TransactionManager
                       System.out.println(transaction.getLog());
                     }
                     
-                    System.out.println("SHIT WAS CLOSED");
 
                     break;
 
@@ -111,8 +109,6 @@ public class TransactionManagerWorker extends TransactionManager
                     accountNumber = (Integer)message.getContent();
                     transaction.log("[TransactionManagerWorker.run] READ_REQUEST >>>>>>>>>> account #" + accountNumber);
                     balance = TransactionServer.accountManager.read(accountNumber, transaction);
-                    System.out.println("THIS IS THE ACCOUNT NUMBER");
-                    System.out.println(accountNumber);
 
                     try
                     {
@@ -131,7 +127,7 @@ public class TransactionManagerWorker extends TransactionManager
                 case WRITE_REQUEST:
 
                     System.out.println("WE GOT INSIDE THE WRITE");
-                    Object[] content = (Object[]) message.getContent();
+                    Object[] content = (Object[])message.getContent();
                     accountNumber = ((Integer) content[0]);
                     balance = ((Integer) content[1]);
                     
@@ -147,7 +143,7 @@ public class TransactionManagerWorker extends TransactionManager
                       System.out.println("[TransactionManagerWorker.run] WRITE_REQUEST - Error when writing to object stream");
                     }
 
-                    System.out.println("SHIT WAS WRITTEN");
+                    System.out.println("THIS WAS WRITTEN");
                     System.out.println(balance);
                     transaction.log("[TransactionManagerWorker.run] WRITE_REQUEST <<<<<<<<<<< account #" + accountNumber + ", new balance $" + balance);
 

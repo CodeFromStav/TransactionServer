@@ -84,7 +84,7 @@ public class TServerProxy implements MessageTypes
    
       // 
         balance = (Integer) readFromNet.readObject();
-        System.out.println("THIS IS THE OUTPUT FROM THE SERVER READ");
+        System.out.println("THE BALANCE HAS BEEN READ");
         System.out.println(balance);
       
            
@@ -101,7 +101,10 @@ public class TServerProxy implements MessageTypes
 
   public int write(int accountNumber, int amount)
   {
-    Message writeMessage = new Message( WRITE_REQUEST, amount );
+  
+          // create object[] with accountNumber and amount
+    Object[] content = new Object[]{accountNumber, amount};
+    Message writeMessage = new Message( WRITE_REQUEST, content );
     Integer balance = null;
 
     try

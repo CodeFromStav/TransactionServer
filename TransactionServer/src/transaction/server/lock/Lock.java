@@ -13,12 +13,15 @@ public class Lock implements LockTypes
     private final Account account;
     private int currentLockType;
     private final ArrayList<Transaction> lockHolders;
-    private final HashMap<Transaction, Integer> lockRequestors;
+    private final HashMap<Transaction, Object[]> lockRequestors;
+    
+    // lockInfo second string of ids current lock holders
+        // current lock, lock to be set, 
 
     public Lock(Account account)
     {
         this.lockHolders = new ArrayList<Transaction>();
-        this.lockRequestors = new HashMap<Transaction, Integer>();
+        this.lockRequestors = new HashMap();
         this.account = account;
         this.currentLockType = EMPTY_LOCK;
     }
@@ -35,7 +38,6 @@ public class Lock implements LockTypes
                 addLockRequestor(transaction, newLockType);
                 wait();
                 removeLockRequestor(transaction);
-                //transaction.log("[Lock.acquire])
             }
             catch (InterruptedException e) {
                 // we need to interrupt the current thread
@@ -99,7 +101,8 @@ public class Lock implements LockTypes
             if( lockRequestors.isEmpty() )
             {
                 // need to ask a question here
-            	currentLockType = 0;
+                    // 
+            	currentLockType = EMPTY_LOCK;
             }
         }
         notifyAll();
@@ -155,7 +158,8 @@ public class Lock implements LockTypes
 
     private void addLockRequestor( Transaction requestor, int newLockType )
     {
-      lockRequestors.put(requestor, newLockType); 
+      Object[] content = new Object[]{account.getAccountNum(), newLockType };
+      lockRequestors.put(requestor, content); 
     }
 
     public static String getLockTypeString( int lockType )
