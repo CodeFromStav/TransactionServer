@@ -19,7 +19,7 @@ public class AccountManager implements LockTypes
     int accountNum;
     int accountBal;
     private int transactionCode; //may not be necessary
-    public static final ArrayList<Account> accounts = new ArrayList<>();
+    private final ArrayList<Account> accounts = new ArrayList<Account>();
 
 
     // Constructor (creates account blueprint)
@@ -27,7 +27,14 @@ public class AccountManager implements LockTypes
     {
         this.accountNum = accountNumber;
         this.accountBal = balance;
-
+        for (int i = 0; i < accountNumber; i++)
+        {
+            Account tempAccount = new Account(balance, i);
+            accounts.add(tempAccount);
+        }
+        System.out.println("THIS IS THE NUMBER OF ACCOUNTS [ACCOUNTMANAGER]");
+        System.out.println(accountNum);
+        
     }
 
     public Account getAccount( int accountNumber )
@@ -77,4 +84,10 @@ public class AccountManager implements LockTypes
     {
         return accountBal;
     }
+    
+    public int getSize()
+    {
+        return accounts.size();
+    }
+    
 }
