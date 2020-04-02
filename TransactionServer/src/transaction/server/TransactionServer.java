@@ -62,12 +62,16 @@ public class TransactionServer extends Thread
     // create account LockManager
     int numberAccounts = 0;
     numberAccounts = Integer.parseInt(serverProperties.getProperty("NUMBER_ACCOUNTS"));
+    System.out.println("TRANSACTION SERVER]] THIS IS THE NUMBER OF ACCOUNTS");
+    System.out.println(numberAccounts);
     int initialBalance;
     initialBalance = Integer.parseInt(serverProperties.getProperty("INITIAL_BALANCE"));
 
     // create AccountManager
     TransactionServer.accountManager = new AccountManager(numberAccounts, initialBalance);
     System.out.println("[TransactionServer.TransactionServer] AccountManager created ");
+    System.out.println(accountManager.getSize());
+    
 
     // create server socket
     try

@@ -111,17 +111,18 @@ public class TransactionManagerWorker extends TransactionManager
                     accountNumber = (Integer)message.getContent();
                     transaction.log("[TransactionManagerWorker.run] READ_REQUEST >>>>>>>>>> account #" + accountNumber);
                     balance = TransactionServer.accountManager.read(accountNumber, transaction);
-                    System.out.println();
+                    System.out.println("THIS IS THE ACCOUNT NUMBER");
+                    System.out.println(accountNumber);
 
                     try
                     {
+                        System.out.println("WRITING SOMETHING IN THE READ REQUEST");
                       writeToNet.writeObject((Integer) balance);
                     }
                     catch (IOException e)
                     {
                       System.out.println("[TransactionManagerWorker.run] READ_REQUEST - Error when writing to object stream");
                     }
-                    System.out.println("SHIT WAS READ");
                     transaction.log("[TransactionManagerWorker.run] READ_REQUEST <<<<<<<<<<< account #" + accountNumber + ", new balance $" + balance);
 
                     break;

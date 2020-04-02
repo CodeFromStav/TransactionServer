@@ -45,6 +45,8 @@ public class TransactionClient extends Thread
     // Thread proxyWorker = new Thread( worker );
     // proxyWorker.start();
     int index;
+    System.out.println("THIS IS THE NUMBER OF TRANSACTIONS");
+    System.out.println(numberTransactions);
     
     for ( index = 0; index < numberTransactions; index++ )
     {
@@ -66,8 +68,10 @@ public class TransactionClient extends Thread
           
           balance = transaction.read(accountFrom);
           
+          System.out.println("WE MADE IT ABOVE THE WRITE IN THE CLIENT");
           transaction.write( accountFrom, balance - amount );
-
+          System.out.println("WE MADE IT BELOW THE WRITE IN THE CLIENT");
+          
           
           balance = transaction.read(accountTo);
           transaction.write( accountTo, balance + amount );
