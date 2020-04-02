@@ -26,7 +26,6 @@ public class TransactionClient extends Thread
       initialBalance = Integer.parseInt(serverProperties.getProperty("INITIAL_BALANCE"));
 
       numberTransactions = Integer.parseInt(serverProperties.getProperty("NUMBER_TRANSACTIONS"));
-      System.out.println( "Client properties loaded..." );
 
     } 
     catch (Exception ex)
@@ -46,9 +45,10 @@ public class TransactionClient extends Thread
     // Thread proxyWorker = new Thread( worker );
     // proxyWorker.start();
     int index;
+    
     for ( index = 0; index < numberTransactions; index++ )
     {
-      int index_1 = 1;
+
       new Thread()
       {
         @Override
@@ -62,7 +62,7 @@ public class TransactionClient extends Thread
           int accountTo = (int) Math.floor(Math.random() * numberAccounts );
           int amount = (int) Math.ceil(Math.random() * initialBalance );
           int balance;
-          System.out.println( "\ttransaction #" + index_1 + ", $" + amount + " from account " + accountFrom + "->" + accountTo );
+          System.out.println( "\ttransaction #" + transID + ", $" + amount + " " + accountFrom + "->" + accountTo );
           
           balance = transaction.read(accountFrom);
           
@@ -80,10 +80,4 @@ public class TransactionClient extends Thread
       
     }
   }
-
-//  public static void main(String[] args)
-//  {
-//	  (new TransactionClient("../config/ServerProperties.properties")).start();
-//	  
-//  }
 }

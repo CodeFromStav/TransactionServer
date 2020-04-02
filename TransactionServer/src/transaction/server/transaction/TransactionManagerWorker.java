@@ -1,7 +1,5 @@
 package transaction.server.transaction;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.io.ObjectInputStream;
@@ -13,7 +11,7 @@ import transaction.server.TransactionServer;
 
 
 // TransactionManagerWorker handles openTransaction requests, write requests, read requests, and closeTransaction requests
-public class TransactionManagerWorker extends TransactionManager implements Runnable
+public class TransactionManagerWorker extends TransactionManager
 {
     // Variable initialization
     Socket client = null;
@@ -33,7 +31,6 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
         {
             readFromNet = new ObjectInputStream( client.getInputStream() );
             writeToNet = new ObjectOutputStream( client.getOutputStream() );
-            System.out.println( "TransactionManagerWorker streams are set up." );
         }
         catch ( IOException e )
         {
@@ -52,11 +49,11 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
             try
             {
                 message = (Message) readFromNet.readObject();
+                
             }
             catch ( IOException | ClassNotFoundException e )
             {
                 System.out.println( "Failed to read message from object stream." );
-                e.printStackTrace();
                 System.exit( 1 );
             }
             // Switch statement to check and process type of message
@@ -78,6 +75,7 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
                         System.out.println( "Error opening transaction" );
                     }
                     transaction.log( "OPEN_TRANSACTION #" + transaction.getID() );
+                    System.out.println("SHIT WAS OPENED");
                     break;
                 // Closing a transaction
                 case CLOSE_TRANSACTION:
@@ -103,15 +101,17 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
                     {
                       System.out.println(transaction.getLog());
                     }
+                    
+                    System.out.println("SHIT WAS CLOSED");
 
                     break;
 
                     // Read a transaction
                 case READ_REQUEST:
                     accountNumber = (Integer)message.getContent();
-                    System.out.println( "Account number is: " + accountNumber );
                     transaction.log("[TransactionManagerWorker.run] READ_REQUEST >>>>>>>>>> account #" + accountNumber);
                     balance = TransactionServer.accountManager.read(accountNumber, transaction);
+                    System.out.println();
 
                     try
                     {
@@ -121,7 +121,7 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
                     {
                       System.out.println("[TransactionManagerWorker.run] READ_REQUEST - Error when writing to object stream");
                     }
-
+                    System.out.println("SHIT WAS READ");
                     transaction.log("[TransactionManagerWorker.run] READ_REQUEST <<<<<<<<<<< account #" + accountNumber + ", new balance $" + balance);
 
                     break;
@@ -129,9 +129,11 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
                 // handles the Write request transactions
                 case WRITE_REQUEST:
 
+                    System.out.println("WE GOT INSIDE THE WRITE");
                     Object[] content = (Object[]) message.getContent();
                     accountNumber = ((Integer) content[0]);
                     balance = ((Integer) content[1]);
+                    
                     transaction.log("[TransactionManagerWorker.run] WRITE_REQUEST >>>>>>>>>> account #" + accountNumber + ", new balance $" + balance);
                     balance = TransactionServer.accountManager.write(accountNumber, transaction, balance);
 
@@ -144,6 +146,8 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
                       System.out.println("[TransactionManagerWorker.run] WRITE_REQUEST - Error when writing to object stream");
                     }
 
+                    System.out.println("SHIT WAS WRITTEN");
+                    System.out.println(balance);
                     transaction.log("[TransactionManagerWorker.run] WRITE_REQUEST <<<<<<<<<<< account #" + accountNumber + ", new balance $" + balance);
 
                     break;
@@ -152,6 +156,7 @@ public class TransactionManagerWorker extends TransactionManager implements Runn
                     System.out.println("[TransactionManagerWorker.run] Warning: Message type not implemented");
 
             }
+            
         }
     }
 }

@@ -1,4 +1,3 @@
-
 package transaction.server;
 
 import java.io.IOException;
@@ -87,17 +86,17 @@ public class TransactionServer extends Thread
       System.exit(1);
     }
   }
+ 
 
 public void run()
 {
   // run server loop
+    
   while(true)
   {
     try
     {
-      System.out.println( "Accepting connections now..." );
       transactionManager.runTransaction(serverSocket.accept());
-      System.out.println( "ServerSocket has accepted..." );
     }
     catch (IOException e)
     {

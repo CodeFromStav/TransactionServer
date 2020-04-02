@@ -4,7 +4,6 @@ import java.util.HashMap;
 import transaction.server.account.Account;
 import java.util.Iterator;
 import transaction.server.transaction.Transaction;
-import transaction.server.lock.LockTypes;
 
 
 public class LockManager implements LockTypes

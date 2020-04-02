@@ -3,6 +3,7 @@ package transaction.server.transaction;
 import java.net.Socket;
 import java.util.ArrayList;
 import transaction.comm.MessageTypes;
+import transaction.server.transaction.TransactionManagerWorker;
 
 
 
@@ -12,7 +13,7 @@ TransactionManager.java
 -open up one connection per transaction, stays open until a close transaction is received.
 -Read/Write requests handled by TransactionWorker
 */
-public class TransactionManager implements MessageTypes
+public class TransactionManager extends Thread implements MessageTypes
 {
 
   // variables
@@ -35,11 +36,8 @@ public class TransactionManager implements MessageTypes
   // function for running the threads
   public void runTransaction( Socket client )
   {
-	  System.out.println( "Attempting to create TransactionManagerWorker thread..." );
-	  TransactionManagerWorker tmw = new TransactionManagerWorker(client);
-	  Thread workerThread = new Thread(tmw);
-	  workerThread.start();
-	  System.out.println( "Created TransactionManagerWorker thread..." );
+      
+       new TransactionManagerWorker(client).start();
     // accept incoming connections
     // call run() to start up worker threads
   }

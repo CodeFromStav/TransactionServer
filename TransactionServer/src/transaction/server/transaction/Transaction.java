@@ -16,7 +16,7 @@ public class Transaction
     public Transaction( int transID )
     {
         this.transID = transID;
-        this.locks = new ArrayList();
+        this.locks = new ArrayList<Lock>();
     }
 
     // Getter method
@@ -42,8 +42,6 @@ public class Transaction
     {
         locks.add( lock );
     }
-    
-    
     
     // Logging function
     public void log( String logString )

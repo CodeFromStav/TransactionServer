@@ -1,6 +1,5 @@
 package transaction.client;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -16,13 +15,12 @@ public class TServerProxy implements MessageTypes
   String host = null;
   int port;
 
-  // Four variables below were all private previously
-  Socket dbConnection = null;
-  ObjectOutputStream writeToNet = null;
-  ObjectInputStream readFromNet = null;
-  Integer transID = 0;
+  private Socket dbConnection = null;
+  private ObjectOutputStream writeToNet = null;
+  private ObjectInputStream readFromNet = null;
+  private Integer transID = 0;
 
-  public TServerProxy(String host, int port)
+  TServerProxy(String host, int port)
   {
     this.host = host;
     this.port = port;
@@ -33,19 +31,21 @@ public class TServerProxy implements MessageTypes
     // create socket connection
     try
     {
+        Message openMessage = new Message(OPEN_TRANSACTION);
         // connect to the server loop
         dbConnection = new Socket(host, port);
-        System.out.println("[TServerProxy.open] Proxy connected!");
+        System.out.println("[TransactionServerProxy.open] Proxy connected!");
         // assign the object input and output
-        writeToNet = new ObjectOutputStream( dbConnection.getOutputStream() );
-        readFromNet = new ObjectInputStream( dbConnection.getInputStream() );
-        transID++;
-        System.out.println( "TServerProxy streams are set up." );
+        writeToNet = new ObjectOutputStream(dbConnection.getOutputStream());
+        readFromNet = new ObjectInputStream(dbConnection.getInputStream());
+      
+        writeToNet.writeObject(openMessage);
+        transID = (int) readFromNet.readObject();
 
     }
-    catch (IOException e)
+    catch (Exception e)
     {
-      System.out.println("[TServerProxy.open] Proxy error occurred!");
+      System.out.println("[TransactionServerProxy.open] Proxy error occurred!");
       e.printStackTrace();
     }
     
@@ -59,15 +59,14 @@ public class TServerProxy implements MessageTypes
   {
 	try 
 	{
-		dbConnection.close();
-		writeToNet.close();
-		readFromNet.close();
+            Message closeMessage = new Message(CLOSE_TRANSACTION);
+            writeToNet.writeObject(closeMessage);
 	}
     catch (IOException e)
 	{
-    	System.out.println("[TServerProxy.open] Proxy error occurred when trying to close");
+    	System.out.println("[TransactionServerProxy.open] Proxy error occurred when trying to close");
 	}
-    System.out.println("[TServerProxy.close] the transaction has ended");
+    System.out.println("[TransactionServerProxy.close] the transaction has ended");
 
   }
   
@@ -75,20 +74,18 @@ public class TServerProxy implements MessageTypes
   public int read(int accountNumber)
   {
     Message readMessage = new Message(READ_REQUEST, accountNumber);
+//    Message fromFile;
     Integer balance = null;
 
+        
     try
     {
-    
-      // 	
-      System.out.println( "Attempting to send read request...");
       writeToNet.writeObject(readMessage);
-      System.out.println( "Read request received..." );
    
       // 
-      System.out.println( "Reading from read request now..." );
-      balance = (Integer) readFromNet.readObject();
-      System.out.println( "Balance is: " + balance );
+        balance = (Integer) readFromNet.readObject();
+        System.out.println("THIS IS THE OUTPUT FROM THE SERVER READ");
+        System.out.println(balance);
       
            
     }
@@ -105,11 +102,13 @@ public class TServerProxy implements MessageTypes
   public int write(int accountNumber, int amount)
   {
     Message writeMessage = new Message( WRITE_REQUEST, amount );
-    Integer balance = amount;
+    Integer balance = null;
 
     try
     {
       writeToNet.writeObject(writeMessage);
+      balance = (Integer) readFromNet.readObject();
+      
     }
     catch (Exception ex)
     {
@@ -117,6 +116,9 @@ public class TServerProxy implements MessageTypes
       ex.printStackTrace();
     }
 
+    System.out.println("THIS IS THE NEW BALANCE");
+    System.out.println(balance);
+    
     return balance;
   }
 

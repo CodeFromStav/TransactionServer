@@ -3,7 +3,6 @@ package transaction.server.lock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import transaction.server.lock.Lock;
 import transaction.server.transaction.Transaction;
 import transaction.server.account.Account;
 
@@ -18,8 +17,8 @@ public class Lock implements LockTypes
 
     public Lock(Account account)
     {
-        this.lockHolders = new ArrayList();
-        this.lockRequestors = new HashMap();
+        this.lockHolders = new ArrayList<Transaction>();
+        this.lockRequestors = new HashMap<Transaction, Integer>();
         this.account = account;
         this.currentLockType = EMPTY_LOCK;
     }
@@ -32,7 +31,7 @@ public class Lock implements LockTypes
         {
             try
             {
-                // transaction.log("[Lock.acquire])
+                transaction.log("[Lock.acquire     | ---->wait to set " + getLockTypeString(newLockType) + " on account #" + account.getAccountNum());
                 addLockRequestor(transaction, newLockType);
                 wait();
                 removeLockRequestor(transaction);
@@ -99,68 +98,55 @@ public class Lock implements LockTypes
 
             if( lockRequestors.isEmpty() )
             {
+                // need to ask a question here
             	currentLockType = 0;
             }
         }
         notifyAll();
     }
-
-    // Used to check is there are conflicting locks being set
+    
+    
     private boolean isConflict( Transaction transaction, int newLockType )
     {
-        if( lockHolders.isEmpty() )
+        if (lockHolders.isEmpty())
         {
-            // no lock holders so no conflict
-            transaction.log( "Current lock: " + getLockTypeString( currentLockType ) + " on account #" + account.getAccountNum() + " has no conflict." );
+            // there are no lock holders, so there is no conflict
+            transaction.log("[Lock.isConflict      | current lock " + getLockTypeString(currentLockType) + " on account #" + account.getAccountNum() + ", no holders");
             return false;
         }
-        else if( lockHolders.size() == 1 && lockHolders.contains( transaction ) )
+        else if (lockHolders.size() == 1 && lockHolders.contains(transaction))
         {
-            if( currentLockType == READ_LOCK && newLockType == READ_LOCK )
-            {
-                // they can share it, so no conflict
-                transaction.log( "Current lock: " + getLockTypeString( currentLockType ) + " and new lock: " + getLockTypeString( newLockType ) + " are both read locks, so no conflict." );
-                return false;
-            }
-            else if( currentLockType == READ_LOCK && newLockType == WRITE_LOCK )
-            {
-                // new lock type is different from current lock type, so we have a conflict
-                transaction.log( "Current lock: " + getLockTypeString( currentLockType ) + " is a read lock, while new lock: " + getLockTypeString( newLockType ) + " is a write lock, so we have a conflict." );
-                return true;
-            }
-            else if( currentLockType == WRITE_LOCK )
-            {
-                // we will have a conflict
-                transaction.log( "Current lock: " + getLockTypeString( currentLockType ) + " and new lock: " + getLockTypeString( newLockType ) + " are conflicting." );
-                return true;
-
-            }
+             // there is only one lock holder, and it's this transaction
+            // so this is not a conflict
+            // if we hold a read lock and want to set a write lock, the lock will be promoted
+            
+            // it would be useless to set a read lock on our own read lock or read or write lock on our own write lock
+            // but in principle transactions are allowed to be doing that
+            transaction.log("[Lock.isConflict            | current lock" + getLockTypeString(currentLockType) + " on account #" + account.getAccountNum() + " this transaction is the only holder" );
+            return false;
         }
-        else // more than one lock in lockHolders and it contains the transaction
+        else if (currentLockType == READ_LOCK && newLockType == READ_LOCK)
         {
-            if( currentLockType == READ_LOCK && newLockType == READ_LOCK )
-            {
-                // they can share it, so no conflict
-                transaction.log( "Current lock: " + getLockTypeString( currentLockType ) + " and new lock: " + getLockTypeString( newLockType ) + " are both read locks, so no conflict." );
-                return false;
-            }
-            else if( currentLockType == READ_LOCK && newLockType == WRITE_LOCK )
-            {
-                // new lock type is different from current lock type, so we have a conflict
-                transaction.log( "Current lock: " + getLockTypeString( currentLockType ) + " is a read lock, while new lock: " + getLockTypeString( newLockType ) + " is a write lock, so we have a conflict." );
-                return true;
-            }
-            else if( currentLockType == WRITE_LOCK )
-            {
-                // we will have a conflict
-                transaction.log( "Current lock: " + getLockTypeString( currentLockType ) + " and new lock: " + getLockTypeString( newLockType ) + " are conflicting." );
-                return true;
-
-            }
+            // then the two share the lock
+            transaction.log("[Lock.isConflict]            | current lock" + getLockTypeString(currentLockType) + " on account #" + account.getAccountNum() + ", sharing the lock");
+            return false;
         }
-        return false;
+        else
+        {
+            // at this point, we have a conflict
+            Iterator <Transaction> lockholdersIterator = lockHolders.iterator();
+            Transaction otherTransaction;
+            StringBuilder holders = new StringBuilder("");
+            while (lockholdersIterator.hasNext()) 
+            {
+                otherTransaction = lockholdersIterator.next();
+                holders.append(" ").append(otherTransaction.getID());
+            }
+            transaction.log("[Lock.isConflict]            | current lock " + getLockTypeString(currentLockType) + " held by transaction(s) " + holders);
+            return true;
+        }
     }
-
+    
     // Returns type of lock
     public synchronized int getLockType()
     {
